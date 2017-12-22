@@ -2,14 +2,14 @@ package br.unb.cic.bd.simuladortrafego.no;
 
 public class No {
 	
-	public static final float ATRASO_DEFAULT = 10;
+	public static final double ATRASO_DEFAULT = 10;
 
 	private String linha;
 	private String nome;
-	private float atraso;
+	private double atraso;
 	private int numero;
 
-	public No(String linha, String nome, float atraso) {
+	public No(String linha, String nome, double atraso) {
 		super();
 		this.linha = linha;
 		this.nome = nome;
@@ -41,11 +41,11 @@ public class No {
 		this.nome = nome;
 	}
 
-	public float getAtraso() {
+	public double getAtraso() {
 		return atraso;
 	}
 
-	public void setAtraso(float atraso) {
+	public void setAtraso(double atraso) {
 		this.atraso = atraso;
 	}
 

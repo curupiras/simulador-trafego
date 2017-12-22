@@ -7,10 +7,10 @@ public class Onibus {
 
 	private Linha linha;
 	private Arco arco;
-	private float posicaoNoArco;
+	private double posicaoNoArco;
 	private String nome;
 
-	public Onibus(String nome, Linha linha, Arco arco, float posicao) {
+	public Onibus(String nome, Linha linha, Arco arco, double posicao) {
 		this.nome = nome;
 		this.linha = linha;
 		this.arco = arco;
@@ -33,11 +33,11 @@ public class Onibus {
 		this.arco = arco;
 	}
 
-	public float getPosicao() {
+	public double getPosicao() {
 		return posicaoNoArco;
 	}
 
-	public void setPosicao(float posicao) {
+	public void setPosicao(double posicao) {
 		this.posicaoNoArco = posicao;
 	}
 
@@ -51,7 +51,7 @@ public class Onibus {
 
 	@Override
 	public String toString() {
-		return nome;
+		return nome + " Arco: " + this.arco + " Posicao: " + this.posicaoNoArco;
 	}
 
 }

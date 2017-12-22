@@ -15,7 +15,7 @@ public class App {
 		
 		SimuladorDeViagem simulador = new SimuladorDeViagem(o1);
 		ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
-		executor.scheduleAtFixedRate(simulador, 0, SimuladorDeViagem.PERIODO_DEFAULT, TimeUnit.SECONDS);
+		executor.scheduleAtFixedRate(simulador, 0, SimuladorDeViagem.PERIODO_DEFAULT_SEGUNDOS, TimeUnit.SECONDS);
 
 	}
 

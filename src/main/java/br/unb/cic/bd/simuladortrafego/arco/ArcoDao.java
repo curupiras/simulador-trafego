@@ -34,7 +34,7 @@ public final class ArcoDao {
 			ResultSet r = s.executeQuery();
 
 			while (r.next()) {
-				Arco arco = new Arco(linha, r.getString(1), r.getFloat(2));
+				Arco arco = new Arco(linha, r.getString(1), r.getDouble(2));
 				map.put(arco.getNumero(), arco);
 			}
 
