@@ -1,4 +1,4 @@
-package br.unb.cic.bd.simuladortrafego.main;
+package br.unb.cic.bd.simuladortrafego;
 
 import br.unb.cic.bd.simuladortrafego.arco.Arco;
 import br.unb.cic.bd.simuladortrafego.arco.DtoArcoPosicao;
