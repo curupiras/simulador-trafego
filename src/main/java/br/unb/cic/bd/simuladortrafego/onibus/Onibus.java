@@ -1,5 +1,7 @@
 package br.unb.cic.bd.simuladortrafego.onibus;
 
+import java.util.Date;
+
 import br.unb.cic.bd.simuladortrafego.arco.Arco;
 import br.unb.cic.bd.simuladortrafego.linha.Linha;
 
@@ -9,12 +11,14 @@ public class Onibus {
 	private Arco arco;
 	private double posicaoNoArco;
 	private String nome;
+	private Date horaAtualizacao;
 
 	public Onibus(String nome, Linha linha, Arco arco, double posicao) {
 		this.nome = nome;
 		this.linha = linha;
 		this.arco = arco;
 		this.posicaoNoArco = posicao;
+		this.horaAtualizacao = new Date();
 	}
 
 	public Linha getLinha() {
@@ -47,6 +51,14 @@ public class Onibus {
 
 	public void setNome(String nome) {
 		this.nome = nome;
+	}
+
+	public Date getHoraAtualizacao() {
+		return horaAtualizacao;
+	}
+
+	public void setHoraAtualizacao(Date horaAtualizacao) {
+		this.horaAtualizacao = horaAtualizacao;
 	}
 
 	@Override

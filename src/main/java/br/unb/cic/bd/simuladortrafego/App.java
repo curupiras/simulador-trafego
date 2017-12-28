@@ -5,24 +5,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 public class App {
-	// public static void main(String[] args) {
-	//
-	// SpringApplication.run(App.class, args);
-	// // Linha linha = new Linha("CIRCULAR-W3-SUL-NORTE-L2-NORTE-SUL");
-	// // Onibus o1 = new Onibus("O1", linha, linha.getArcos().get(1), 0);
-	// //
-	// // SimuladorDeViagem simulador = new SimuladorDeViagem(o1);
-	// // ScheduledExecutorService executor =
-	// // Executors.newScheduledThreadPool(1);
-	// // executor.scheduleAtFixedRate(simulador, 0,
-	// // SimuladorDeViagem.PERIODO_DEFAULT_SEGUNDOS, TimeUnit.SECONDS);
-	//
-	// }
 
 	public static void main(String[] args) {
 		SpringApplication.run(App.class, args);
 	}
-
 }
 
 // Graph<No, Arco> g = new DefaultDirectedGraph<>(Arco.class);

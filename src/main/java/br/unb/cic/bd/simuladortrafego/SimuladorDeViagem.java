@@ -1,5 +1,7 @@
 package br.unb.cic.bd.simuladortrafego;
 
+import java.util.Date;
+
 import br.unb.cic.bd.simuladortrafego.arco.Arco;
 import br.unb.cic.bd.simuladortrafego.arco.DtoArcoPosicao;
 import br.unb.cic.bd.simuladortrafego.linha.Linha;
@@ -22,10 +24,11 @@ public class SimuladorDeViagem implements Runnable {
         atualizarPosicao(onibus);
         
         PosicaoDao posicaoDao = PosicaoDao.getInstance();
-        posicaoDao.inserePosicao(onibus);
+        long chave = posicaoDao.inserePosicao(onibus);
     }
 
 	private void atualizarPosicao(Onibus onibus) {
+		onibus.setHoraAtualizacao(new Date());
 		double distancia = calcularDistanciaPercorrida(onibus);
 		DtoArcoPosicao arcoPosicaoNovo = getNovaPosicao(distancia, onibus);
 		onibus.setArco(arcoPosicaoNovo.getArco());

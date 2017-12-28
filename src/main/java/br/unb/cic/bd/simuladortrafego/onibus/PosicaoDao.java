@@ -3,11 +3,17 @@ package br.unb.cic.bd.simuladortrafego.onibus;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 public class PosicaoDao {
 
 	private static final PosicaoDao INSTANCE = new PosicaoDao();
 	private Connection conn;
+	
+	private static final Log logger = LogFactory.getLog(PosicaoDao.class);
 
 	private PosicaoDao() {
 
@@ -17,7 +23,9 @@ public class PosicaoDao {
 		return INSTANCE;
 	}
 
-	public void inserePosicao(Onibus onibus) {
+	public long inserePosicao(Onibus onibus) {
+		
+		long chave = 0;
 
 		try {
 			Class.forName("org.postgresql.Driver");
@@ -35,6 +43,12 @@ public class PosicaoDao {
 			s.setInt(5, onibus.getArco().getNumero());
 
 			s.execute();
+			
+			ResultSet rs = s.getGeneratedKeys();
+			
+			if(rs.next()){
+				chave = rs.getInt(1);
+			}
 
 			s.close();
 			conn.close();
@@ -42,7 +56,38 @@ public class PosicaoDao {
 		} catch (
 
 		Exception e) {
-			e.printStackTrace();
+			logger.error("Erro ao tentar inserir prosição no banco de dados.", e);
+		}
+		
+		return chave;
+	}
+
+	public void atualizaLatitudeLongitude(long chave, Onibus onibus) {
+		try {
+			Class.forName("org.postgresql.Driver");
+			String url = "jdbc:postgresql://localhost:5432/gerenciador";
+			this.conn = DriverManager.getConnection(url, "postgres", "curup1ras");
+
+			PreparedStatement s = conn
+					.prepareStatement("select ST_X(geo_ponto_rede_pto) AS LONG, ST_Y(geo_ponto_rede_pto) AS LAT"
+							+ " FROM posicao where fid = ?)");
+
+			s.setLong(1, chave);
+
+			ResultSet rs = s.executeQuery();
+			
+			if(rs.next()){
+				String latitude = rs.getString("LAT");
+				String longitude = rs.getString("LONG");
+			}
+
+			s.close();
+			conn.close();
+
+		} catch (
+
+		Exception e) {
+			logger.error("Erro ao tentar inserir prosição no banco de dados.", e);
 		}
 	}
 

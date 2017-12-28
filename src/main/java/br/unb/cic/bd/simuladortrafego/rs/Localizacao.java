@@ -1,16 +1,21 @@
 package br.unb.cic.bd.simuladortrafego.rs;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.unb.cic.bd.simuladortrafego.onibus.Onibus;
+import br.unb.cic.bd.simuladortrafego.localizador.Localizador;
+import br.unb.cic.bd.simuladortrafego.onibus.DtoFrota;
 
 @RestController
 public class Localizacao {
 
+	@Autowired
+	Localizador localizador;
+
 	@RequestMapping("/localizacao")
-	public Onibus localizacao() {
-		return new Onibus("O1", null, null, 0);
+	public DtoFrota localizacao() {
+		return localizador.recuperarLocalizaçãoDaFrota();
 	}
 
 }
