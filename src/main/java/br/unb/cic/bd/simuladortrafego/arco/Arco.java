@@ -1,8 +1,8 @@
 package br.unb.cic.bd.simuladortrafego.arco;
 
+import br.unb.cic.bd.simuladortrafego.Parametros;
+
 public class Arco {
-	
-	public static final double VELOCIDADE_MEDIA_DEFAULT = 60;
 	
 	private String nome;
 	private String linha;
@@ -25,7 +25,7 @@ public class Arco {
 		this.nome = nome;
 		this.tamanho = tamanho;
 		this.numero = Integer.parseInt(nome.substring(1));
-		this.velocidadeMedia = VELOCIDADE_MEDIA_DEFAULT;
+		this.velocidadeMedia = Parametros.VELOCIDADE_MEDIA_DEFAULT;
 	}
 
 	public String getLinha() {

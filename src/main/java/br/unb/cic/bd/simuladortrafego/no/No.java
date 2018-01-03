@@ -1,8 +1,8 @@
 package br.unb.cic.bd.simuladortrafego.no;
 
+import br.unb.cic.bd.simuladortrafego.Parametros;
+
 public class No {
-	
-	public static final double ATRASO_DEFAULT = 10;
 
 	private String linha;
 	private String nome;
@@ -22,7 +22,7 @@ public class No {
 		this.linha = linha;
 		this.nome = nome;
 		this.numero = Integer.parseInt(nome.substring(1));
-		this.atraso = ATRASO_DEFAULT;
+		this.atraso = Parametros.ATRASO_DEFAULT;
 	}
 
 	public String getLinha() {
