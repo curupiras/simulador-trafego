@@ -12,6 +12,8 @@ public class Onibus {
 	private double posicaoNoArco;
 	private String nome;
 	private Date horaAtualizacao;
+	private String latitude;
+	private String longitude;
 
 	public Onibus(String nome, Linha linha, Arco arco, double posicao) {
 		this.nome = nome;
@@ -59,6 +61,22 @@ public class Onibus {
 
 	public void setHoraAtualizacao(Date horaAtualizacao) {
 		this.horaAtualizacao = horaAtualizacao;
+	}
+
+	public String getLatitude() {
+		return latitude;
+	}
+
+	public void setLatitude(String latitude) {
+		this.latitude = latitude;
+	}
+
+	public String getLongitude() {
+		return longitude;
+	}
+
+	public void setLongitude(String longitude) {
+		this.longitude = longitude;
 	}
 
 	@Override

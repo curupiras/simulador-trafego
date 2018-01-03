@@ -25,22 +25,25 @@ public class Frota {
 	public Frota() {
 		lista = new ArrayList<>();
 		mapa = new HashMap<>();
-		
+
 		Linha linha = new Linha("CIRCULAR-W3-SUL-NORTE-L2-NORTE-SUL");
+
 		Onibus o1 = new Onibus("O1", linha, linha.getArcos().get(1), 0);
+		Onibus o2 = new Onibus("O2", linha, linha.getArcos().get(10), 0);
 		inserirOnibus(o1);
-		
-		iniciarSimuladoresDeViagem(lista);
+		inserirOnibus(o2);
+
+		iniciarSimuladoresDeViagem();
 	}
 
-	private void iniciarSimuladoresDeViagem(List<Onibus> lista) {
-		
+	private void iniciarSimuladoresDeViagem() {
+
 		for (Onibus onibus : lista) {
 			SimuladorDeViagem simulador = new SimuladorDeViagem(onibus);
 			ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
 			executor.scheduleAtFixedRate(simulador, 0, SimuladorDeViagem.PERIODO_DEFAULT_SEGUNDOS, TimeUnit.SECONDS);
 		}
-		
+
 	}
 
 	public void inserirOnibus(Onibus onibus) {
