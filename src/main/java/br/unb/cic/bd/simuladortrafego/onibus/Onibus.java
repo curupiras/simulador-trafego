@@ -2,24 +2,25 @@ package br.unb.cic.bd.simuladortrafego.onibus;
 
 import java.util.Date;
 
-import br.unb.cic.bd.simuladortrafego.arco.Arco;
+import br.unb.cic.bd.simuladortrafego.grafo.DtoTempoPosicao;
+import br.unb.cic.bd.simuladortrafego.grafo.ElementoGrafo;
 import br.unb.cic.bd.simuladortrafego.linha.Linha;
 
 public class Onibus {
 
 	private Linha linha;
-	private Arco arco;
-	private double posicaoNoArco;
+	private ElementoGrafo elementoGrafo;
+	private double posicaoNoElementoGrafo;
 	private String nome;
 	private Date horaAtualizacao;
 	private String latitude;
 	private String longitude;
 
-	public Onibus(String nome, Linha linha, Arco arco, double posicao) {
+	public Onibus(String nome, Linha linha, ElementoGrafo elementoGrafo, double posicao) {
 		this.nome = nome;
 		this.linha = linha;
-		this.arco = arco;
-		this.posicaoNoArco = posicao;
+		this.elementoGrafo = elementoGrafo;
+		this.posicaoNoElementoGrafo = posicao;
 		this.horaAtualizacao = new Date();
 	}
 
@@ -31,20 +32,20 @@ public class Onibus {
 		this.linha = linha;
 	}
 
-	public Arco getArco() {
-		return arco;
+	public ElementoGrafo getElementoGrafo() {
+		return elementoGrafo;
 	}
 
-	public void setArco(Arco arco) {
-		this.arco = arco;
+	public void setElementoGrafo(ElementoGrafo elementoGrafo) {
+		this.elementoGrafo = elementoGrafo;
 	}
 
 	public double getPosicao() {
-		return posicaoNoArco;
+		return posicaoNoElementoGrafo;
 	}
 
 	public void setPosicao(double posicao) {
-		this.posicaoNoArco = posicao;
+		this.posicaoNoElementoGrafo = posicao;
 	}
 
 	public String getNome() {
@@ -81,7 +82,23 @@ public class Onibus {
 
 	@Override
 	public String toString() {
-		return nome + " Arco: " + this.arco + " Posicao: " + this.posicaoNoArco;
+		return nome + " Elemento: " + this.elementoGrafo + " Posicao: " + this.posicaoNoElementoGrafo;
+	}
+
+	public void deslocar(long tempo) {
+
+		DtoTempoPosicao tempoPosicao = new DtoTempoPosicao(tempo, this.posicaoNoElementoGrafo);
+
+		while (tempoPosicao.getTempo() > 0) {
+			elementoGrafo.consomeTempo(tempoPosicao);
+			if(tempoPosicao.getPosicao() == 1){
+				elementoGrafo = elementoGrafo.getProximo();
+				tempoPosicao.setPosicao(0);
+			}
+		}
+		
+		posicaoNoElementoGrafo = tempoPosicao.getPosicao();
+
 	}
 
 }

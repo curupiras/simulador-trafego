@@ -1,13 +1,14 @@
-package br.unb.cic.bd.simuladortrafego.no;
+package br.unb.cic.bd.simuladortrafego.grafo;
 
 import br.unb.cic.bd.simuladortrafego.Parametros;
 
-public class No {
+public class No extends ElementoGrafo {
 
 	private String linha;
 	private String nome;
 	private double atraso;
 	private int numero;
+	private ElementoGrafo proximo;
 
 	public No(String linha, String nome, double atraso) {
 		super();
@@ -60,6 +61,34 @@ public class No {
 	@Override
 	public String toString() {
 		return this.nome;
+	}
+
+	@Override
+	public void consomeTempo(DtoTempoPosicao tempoPosicao) {
+		double tempo = tempoPosicao.getTempo();
+		double posicao = tempoPosicao.getPosicao();
+		double atrasoRemanescente = atraso - atraso * posicao;
+
+		if (atrasoRemanescente <= tempo) {
+			tempoPosicao.setTempo(tempo - atrasoRemanescente);
+			tempoPosicao.setPosicao(1);
+		} else {
+			tempoPosicao.setTempo(0);
+			tempoPosicao.setPosicao(posicao + tempo / atraso);
+		}
+	}
+
+	public ElementoGrafo getProximo() {
+		return proximo;
+	}
+
+	public void setProximo(ElementoGrafo proximo) {
+		this.proximo = proximo;
+	}
+
+	@Override
+	public double getVelocidadeMedia() {
+		return 0;
 	}
 
 }

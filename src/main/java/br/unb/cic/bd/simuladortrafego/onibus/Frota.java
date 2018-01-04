@@ -12,6 +12,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Component;
 
+import br.unb.cic.bd.simuladortrafego.Parametros;
 import br.unb.cic.bd.simuladortrafego.SimuladorDeViagem;
 import br.unb.cic.bd.simuladortrafego.linha.Linha;
 
@@ -41,7 +42,7 @@ public class Frota {
 		for (Onibus onibus : lista) {
 			SimuladorDeViagem simulador = new SimuladorDeViagem(onibus);
 			ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
-			executor.scheduleAtFixedRate(simulador, 0, SimuladorDeViagem.PERIODO_DEFAULT_SEGUNDOS, TimeUnit.SECONDS);
+			executor.scheduleAtFixedRate(simulador, 0, Parametros.PERIODO_DE_DESLOCAMENTO_EM_SEGUNDOS, TimeUnit.SECONDS);
 		}
 
 	}

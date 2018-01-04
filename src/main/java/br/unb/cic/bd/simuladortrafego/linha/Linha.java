@@ -1,41 +1,36 @@
 package br.unb.cic.bd.simuladortrafego.linha;
 
-import java.util.Map;
+import java.util.List;
 
-import br.unb.cic.bd.simuladortrafego.arco.Arco;
-import br.unb.cic.bd.simuladortrafego.arco.ArcoDao;
-import br.unb.cic.bd.simuladortrafego.no.No;
-import br.unb.cic.bd.simuladortrafego.no.NoDao;
+import br.unb.cic.bd.simuladortrafego.grafo.Arco;
+import br.unb.cic.bd.simuladortrafego.grafo.ArcoDao;
+import br.unb.cic.bd.simuladortrafego.grafo.No;
+import br.unb.cic.bd.simuladortrafego.grafo.NoDao;
 
 public class Linha {
 
 	private String nome;
-	private Map<Integer, Arco> arcos;
-	private Map<Integer, No> nos;
-	private int primeiroArco = Integer.MAX_VALUE;
-	private int ultimoArco = Integer.MIN_VALUE;
+	private List<Arco> arcos;
+	private List<No> nos;
 
 	public Linha(String nome) {
 		this.nome = nome;
 
 		ArcoDao arcoDao = ArcoDao.getInstance();
 		this.arcos = arcoDao.getArcosFromLinha(nome);
-		setPrimeiroUltimoArco(this.arcos);
 
 		NoDao noDao = NoDao.getInstance();
 		this.nos = noDao.getNosFromLinha(nome);
-	}
 
-	private void setPrimeiroUltimoArco(Map<Integer, Arco> arcos) {
-		for (Integer key : arcos.keySet()) {
-			if (key < primeiroArco) {
-				primeiroArco = key;
-			}
-
-			if (key > ultimoArco) {
-				ultimoArco = key;
-			}
+		for (int i = 0; i < nos.size(); i++) {
+			nos.get(i).setProximo(arcos.get(i));
 		}
+
+		for (int i = 0; i < arcos.size() - 1; i++) {
+			arcos.get(i).setProximo(nos.get(i + 1));
+		}
+		
+		arcos.get(arcos.size() - 1).setProximo(nos.get(0));
 
 	}
 
@@ -47,35 +42,25 @@ public class Linha {
 		this.nome = nome;
 	}
 
-	public Map<Integer, Arco> getArcos() {
+	public List<Arco> getArcos() {
 		return arcos;
 	}
 
-	public void setArcos(Map<Integer, Arco> arcos) {
+	public void setArcos(List<Arco> arcos) {
 		this.arcos = arcos;
 	}
 
-	public Map<Integer, No> getNos() {
+	public List<No> getNos() {
 		return nos;
 	}
 
-	public void setNos(Map<Integer, No> nos) {
+	public void setNos(List<No> nos) {
 		this.nos = nos;
 	}
 
 	@Override
 	public String toString() {
 		return nos.toString() + "\n" + arcos.toString();
-	}
-
-	public Arco getProximoArco(Arco arco) {
-		int numeroArco = arco.getNumero();
-
-		if (numeroArco == ultimoArco) {
-			return arcos.get(primeiroArco);
-		}
-
-		return arcos.get(numeroArco + 1);
 	}
 
 }
