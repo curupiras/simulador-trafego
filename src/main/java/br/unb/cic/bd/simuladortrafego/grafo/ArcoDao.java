@@ -9,16 +9,7 @@ import java.util.List;
 
 public final class ArcoDao {
 
-	private static final ArcoDao INSTANCE = new ArcoDao();
 	private Connection conn;
-
-	private ArcoDao() {
-
-	}
-
-	public static ArcoDao getInstance() {
-		return INSTANCE;
-	}
 
 	public List<Arco> getArcosFromLinha(String linha) {
 

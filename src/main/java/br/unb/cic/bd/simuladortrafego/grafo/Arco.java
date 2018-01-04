@@ -6,18 +6,22 @@ public class Arco extends ElementoGrafo {
 
 	private String nome;
 	private String linha;
-	private double velocidadeMedia;
+	private double velocidadeMaxima;
+	private double velocidade;
 	private double tamanho;
 	private int numero;
 	private ElementoGrafo proximo;
+	private StatusEnum status;
 
-	public Arco(String linha, String nome, double velocidadeMedia, double tamanho) {
+	public Arco(String linha, String nome, double velocidadeMaxima, double tamanho) {
 		super();
 		this.nome = nome;
 		this.linha = linha;
-		this.velocidadeMedia = velocidadeMedia;
+		this.velocidadeMaxima = velocidadeMaxima;
+		this.velocidade = velocidadeMaxima;
 		this.tamanho = tamanho;
 		this.numero = Integer.parseInt(nome.substring(1));
+		this.status = StatusEnum.NORMAL;
 	}
 
 	public Arco(String linha, String nome, double tamanho) {
@@ -26,7 +30,9 @@ public class Arco extends ElementoGrafo {
 		this.nome = nome;
 		this.tamanho = tamanho;
 		this.numero = Integer.parseInt(nome.substring(1));
-		this.velocidadeMedia = Parametros.VELOCIDADE_MEDIA_KM_POR_HORA;
+		this.velocidadeMaxima = Parametros.VELOCIDADE_MAXIMA_60_KM_POR_HORA;
+		this.velocidade = Parametros.VELOCIDADE_MAXIMA_60_KM_POR_HORA;
+		this.status = StatusEnum.NORMAL;
 	}
 
 	public String getLinha() {
@@ -45,12 +51,12 @@ public class Arco extends ElementoGrafo {
 		this.nome = nome;
 	}
 
-	public double getVelocidadeMedia() {
-		return velocidadeMedia;
+	public double getVelocidadeMaxima() {
+		return velocidadeMaxima;
 	}
 
-	public void setVelocidadeMedia(double velocidadeMedia) {
-		this.velocidadeMedia = velocidadeMedia;
+	public void setVelocidadeMaxima(double velocidadeMaxima) {
+		this.velocidadeMaxima = velocidadeMaxima;
 	}
 
 	public double getTamanho() {
@@ -91,11 +97,11 @@ public class Arco extends ElementoGrafo {
 	}
 
 	private double calcularDistancia(double tempo) {
-		return this.velocidadeMedia * Parametros.KILOMETROS_POR_HORA_PARA_METROS_POR_SEGUNDO * tempo;
+		return this.velocidadeMaxima * Parametros.KILOMETROS_POR_HORA_PARA_METROS_POR_SEGUNDO * tempo;
 	}
 
 	private double calcularTempo(double distancia) {
-		return distancia / (this.velocidadeMedia * Parametros.KILOMETROS_POR_HORA_PARA_METROS_POR_SEGUNDO);
+		return distancia / (this.velocidadeMaxima * Parametros.KILOMETROS_POR_HORA_PARA_METROS_POR_SEGUNDO);
 	}
 
 	public ElementoGrafo getProximo() {
@@ -104,6 +110,22 @@ public class Arco extends ElementoGrafo {
 
 	public void setProximo(ElementoGrafo proximo) {
 		this.proximo = proximo;
+	}
+
+	public double getVelocidade() {
+		return velocidade;
+	}
+
+	public void setVelocidade(double velocidade) {
+		this.velocidade = velocidade;
+	}
+
+	public StatusEnum getStatus() {
+		return status;
+	}
+
+	public void setStatus(StatusEnum status) {
+		this.status = status;
 	}
 
 }

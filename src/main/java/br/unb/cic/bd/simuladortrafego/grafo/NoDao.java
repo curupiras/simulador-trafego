@@ -11,16 +11,7 @@ import java.util.Map;
 
 public final class NoDao {
 
-	private static final NoDao INSTANCE = new NoDao();
 	private Connection conn;
-
-	private NoDao() {
-
-	}
-
-	public static NoDao getInstance() {
-		return INSTANCE;
-	}
 
 	public List<No> getNosFromLinha(String linha) {
 
@@ -38,11 +29,11 @@ public final class NoDao {
 
 			while (r.next()) {
 				No no = new No(linha, r.getString(1));
-				map.put(no.getNumero(),no);
+				map.put(no.getNumero(), no);
 			}
-			
-			for (int i = 0 ; i<map.size();i++) {
-				lista.add(map.get(i+1));
+
+			for (int i = 0; i < map.size(); i++) {
+				lista.add(map.get(i + 1));
 			}
 
 			s.close();

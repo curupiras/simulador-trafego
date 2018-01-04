@@ -8,24 +8,17 @@ import java.sql.Statement;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.stereotype.Component;
 
 import br.unb.cic.bd.simuladortrafego.grafo.Arco;
 
+@Component
 public class PosicaoDao {
 
-	private static final PosicaoDao INSTANCE = new PosicaoDao();
 	private Connection conn;
 
 	private static final Log logger = LogFactory.getLog(PosicaoDao.class);
 
-	private PosicaoDao() {
-
-	}
-
-	public static PosicaoDao getInstance() {
-		return INSTANCE;
-	}
-	
 	public long inserePosicao(Onibus onibus) {
 		if(onibus.getElementoGrafo() instanceof Arco){
 			return inserePosicaoArco(onibus);
@@ -50,7 +43,7 @@ public class PosicaoDao {
 
 			ps.setString(1, onibus.getNome());
 			ps.setString(2, onibus.getLinha().getNome());
-			ps.setDouble(3, onibus.getElementoGrafo().getVelocidadeMedia());
+			ps.setDouble(3, onibus.getElementoGrafo().getVelocidade());
 			ps.setString(4, onibus.getElementoGrafo().getNome());
 
 			ps.execute();
@@ -89,7 +82,7 @@ public class PosicaoDao {
 
 			ps.setString(1, onibus.getNome());
 			ps.setString(2, onibus.getLinha().getNome());
-			ps.setDouble(3, onibus.getElementoGrafo().getVelocidadeMedia());
+			ps.setDouble(3, onibus.getElementoGrafo().getVelocidade());
 			ps.setDouble(4, onibus.getPosicao());
 			ps.setInt(5, onibus.getElementoGrafo().getNumero());
 

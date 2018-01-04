@@ -23,7 +23,7 @@ public class No extends ElementoGrafo {
 		this.linha = linha;
 		this.nome = nome;
 		this.numero = Integer.parseInt(nome.substring(1));
-		this.atraso = Parametros.ATRASO_DEFAULT;
+		this.atraso = Parametros.ATRASO_NA_PARADA_EM_SEGUNDOS;
 	}
 
 	public String getLinha() {
@@ -87,7 +87,7 @@ public class No extends ElementoGrafo {
 	}
 
 	@Override
-	public double getVelocidadeMedia() {
+	public double getVelocidade() {
 		return 0;
 	}
 

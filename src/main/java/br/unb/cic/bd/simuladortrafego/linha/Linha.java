@@ -12,14 +12,16 @@ public class Linha {
 	private String nome;
 	private List<Arco> arcos;
 	private List<No> nos;
+	private ArcoDao arcoDao;
+	private NoDao noDao;
 
 	public Linha(String nome) {
 		this.nome = nome;
 
-		ArcoDao arcoDao = ArcoDao.getInstance();
+		arcoDao = new ArcoDao();
 		this.arcos = arcoDao.getArcosFromLinha(nome);
 
-		NoDao noDao = NoDao.getInstance();
+		noDao = new NoDao();
 		this.nos = noDao.getNosFromLinha(nome);
 
 		for (int i = 0; i < nos.size(); i++) {
