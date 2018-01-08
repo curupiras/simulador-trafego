@@ -87,7 +87,7 @@ public class No extends ElementoGrafo {
 	}
 
 	@Override
-	public double getVelocidade() {
+	public double getVelocidadeMedia() {
 		return 0;
 	}
 

@@ -7,7 +7,12 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 public final class ArcoDao {
+
+	private static final Log logger = LogFactory.getLog(ArcoDao.class);
 
 	private Connection conn;
 
@@ -35,9 +40,35 @@ public final class ArcoDao {
 		} catch (
 
 		Exception e) {
-			e.printStackTrace();
+			logger.error("Erro ao tentar obter arcos.",e);
 		}
 
 		return lista;
 	}
+
+	public void atualizaVelocidades(List<Arco> lista) {
+
+		try {
+			Class.forName("org.postgresql.Driver");
+			String url = "jdbc:postgresql://localhost:5432/gerenciador";
+			this.conn = DriverManager.getConnection(url, "postgres", "curup1ras");
+			conn.setAutoCommit(false);
+			PreparedStatement s = conn.prepareStatement("update arco set velocidade = ? where fid = ?");
+
+			for (Arco arco : lista) {
+				s.setDouble(1, arco.getVelocidadeMedia());
+				s.setDouble(2, arco.getNumero());
+				s.executeUpdate();
+			}
+
+			conn.commit();
+			s.close();
+			conn.close();
+
+		} catch (Exception e) {
+			logger.error("Erro ao atualizar velocidades dos arcos.",e);
+		}
+
+	}
+
 }

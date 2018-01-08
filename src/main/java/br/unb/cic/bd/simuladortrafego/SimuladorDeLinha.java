@@ -4,6 +4,7 @@ import java.util.Calendar;
 import java.util.List;
 
 import br.unb.cic.bd.simuladortrafego.grafo.Arco;
+import br.unb.cic.bd.simuladortrafego.grafo.ArcoDao;
 import br.unb.cic.bd.simuladortrafego.grafo.No;
 import br.unb.cic.bd.simuladortrafego.grafo.StatusEnum;
 import br.unb.cic.bd.simuladortrafego.linha.Linha;
@@ -11,15 +12,22 @@ import br.unb.cic.bd.simuladortrafego.linha.Linha;
 public class SimuladorDeLinha implements Runnable {
 
 	private Linha linha;
+	private ArcoDao arcoDao;
 
 	public SimuladorDeLinha(Linha linha) {
 		this.linha = linha;
+		this.arcoDao = new ArcoDao();
 	}
 
 	public synchronized void run() {
 		atualizaStatusDosArcos();
 		atualizaVelocidadesDosArcos();
 		atualizaAtrasosDosNos();
+		atualizaVelocidadesNoBanco();
+	}
+
+	private void atualizaVelocidadesNoBanco() {
+		arcoDao.atualizaVelocidades(linha.getArcos());
 	}
 
 	private void atualizaStatusDosArcos() {
@@ -34,6 +42,7 @@ public class SimuladorDeLinha implements Runnable {
 				status = regredirStatus(status, evento);
 			}
 
+			arco.setStatus(status);
 		}
 	}
 
@@ -69,7 +78,7 @@ public class SimuladorDeLinha implements Runnable {
 			}
 		}
 
-		return StatusEnum.NORMAL;
+		return status;
 	}
 
 	private void atualizaVelocidadesDosArcos() {
@@ -77,14 +86,12 @@ public class SimuladorDeLinha implements Runnable {
 		for (Arco arco : arcos) {
 			double velocidadeMaxima = arco.getVelocidadeMaxima();
 			StatusEnum status = arco.getStatus();
-			double fatorOscilacao = Parametros.FATOR_DE_OSCILACAO_DA_VELOCIDADE;
 			double velocidade;
 			velocidade = velocidadeMaxima * status.fatorDeCorrecao();
 			if (isHorarioDePico()) {
 				velocidade = velocidade * Parametros.FATOR_DE_CORRECAO_HORARIO_DE_PICO;
 			}
-			velocidade = velocidade * ((1 - fatorOscilacao) + fatorOscilacao * Math.random() * 2);
-			arco.setVelocidade(velocidade);
+			arco.setVelocidadeMedia(velocidade);
 		}
 	}
 
@@ -98,39 +105,39 @@ public class SimuladorDeLinha implements Runnable {
 		}
 	}
 
-	private boolean isHorarioDePico(){
-		Calendar inferiorMatutino =Calendar.getInstance();
+	private boolean isHorarioDePico() {
+		Calendar inferiorMatutino = Calendar.getInstance();
 		inferiorMatutino.set(Calendar.HOUR, Parametros.LIMITE_INFERIOR_HORA_DE_PICO_MATUTINO);
 		inferiorMatutino.set(Calendar.MINUTE, Parametros.LIMITE_INFERIOR_MINUTO_DE_PICO_MATUTINO);
 		inferiorMatutino.set(Calendar.SECOND, 0);
-		
-		Calendar superiorMatutino =Calendar.getInstance();
+
+		Calendar superiorMatutino = Calendar.getInstance();
 		superiorMatutino.set(Calendar.HOUR, Parametros.LIMITE_SUPERIOR_HORA_DE_PICO_MATUTINO);
 		superiorMatutino.set(Calendar.MINUTE, Parametros.LIMITE_SUPERIOR_MINUTO_DE_PICO_MATUTINO);
 		superiorMatutino.set(Calendar.SECOND, 0);
-		
-		Calendar inferiorVespertino =Calendar.getInstance();
+
+		Calendar inferiorVespertino = Calendar.getInstance();
 		inferiorVespertino.set(Calendar.HOUR, Parametros.LIMITE_INFERIOR_HORA_DE_PICO_VESPERTINO);
 		inferiorVespertino.set(Calendar.MINUTE, Parametros.LIMITE_INFERIOR_MINUTO_DE_PICO_VESPERTINO);
 		inferiorVespertino.set(Calendar.SECOND, 0);
-		
-		Calendar superiorVespertino =Calendar.getInstance();
+
+		Calendar superiorVespertino = Calendar.getInstance();
 		superiorVespertino.set(Calendar.HOUR, Parametros.LIMITE_SUPERIOR_HORA_DE_PICO_VESPERTINO);
 		superiorVespertino.set(Calendar.MINUTE, Parametros.LIMITE_SUPERIOR_MINUTO_DE_PICO_VESPERTINO);
 		superiorVespertino.set(Calendar.SECOND, 0);
-		
+
 		Calendar agora = Calendar.getInstance();
-		
-		if(agora.compareTo(inferiorMatutino) < 0 && agora.compareTo(superiorMatutino) > 0 ){
+
+		if (agora.compareTo(inferiorMatutino) > 0 && agora.compareTo(superiorMatutino) < 0) {
 			return true;
 		}
-		
-		if(agora.compareTo(inferiorVespertino) < 0 && agora.compareTo(superiorVespertino) > 0 ){
+
+		if (agora.compareTo(inferiorVespertino) > 0 && agora.compareTo(superiorVespertino) < 0) {
 			return true;
 		}
-		
+
 		return false;
-		
+
 	}
 
 }

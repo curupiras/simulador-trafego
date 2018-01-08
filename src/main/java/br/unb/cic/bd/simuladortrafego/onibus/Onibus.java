@@ -15,6 +15,7 @@ public class Onibus {
 	private Date horaAtualizacao;
 	private String latitude;
 	private String longitude;
+	private double velocidade;
 
 	public Onibus(String nome, Linha linha, ElementoGrafo elementoGrafo, double posicao) {
 		this.nome = nome;
@@ -91,14 +92,22 @@ public class Onibus {
 
 		while (tempoPosicao.getTempo() > 0) {
 			elementoGrafo.consomeTempo(tempoPosicao);
-			if(tempoPosicao.getPosicao() == 1){
+			if (tempoPosicao.getPosicao() == 1) {
 				elementoGrafo = elementoGrafo.getProximo();
 				tempoPosicao.setPosicao(0);
 			}
 		}
-		
+
 		posicaoNoElementoGrafo = tempoPosicao.getPosicao();
 
+	}
+
+	public double getVelocidade() {
+		return velocidade;
+	}
+
+	public void setVelocidade(double velocidade) {
+		this.velocidade = velocidade;
 	}
 
 }

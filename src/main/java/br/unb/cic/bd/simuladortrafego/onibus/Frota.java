@@ -36,9 +36,9 @@ public class Frota {
 		inserirLinha(l1);
 
 		Onibus o1 = new Onibus("O1", l1, l1.getArcos().get(1), 0);
-//		Onibus o2 = new Onibus("O2", l1, l1.getArcos().get(10), 0);
+		Onibus o2 = new Onibus("O2", l1, l1.getArcos().get(1), 0.3);
 		inserirOnibus(o1);
-//		inserirOnibus(o2);
+		inserirOnibus(o2);
 
 		iniciarSimuladoresDeViagens();
 		iniciarSimuladoresDeLinhas();
@@ -55,7 +55,6 @@ public class Frota {
 	}
 	
 	private void iniciarSimuladoresDeLinhas() {
-		//TODO: Testar simulador de linhas
 		for (Linha linha : listaLinhas) {
 			SimuladorDeLinha simulador = new SimuladorDeLinha(linha);
 			ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);

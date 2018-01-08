@@ -14,6 +14,7 @@ public enum StatusEnum {
 
 	StatusEnum(String nome, double fator) {
 		this.nome = nome;
+		this.fatorDeCorrecao = fator;
 	}
 
 	public String nome() {

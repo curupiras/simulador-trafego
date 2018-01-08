@@ -7,7 +7,7 @@ public class Arco extends ElementoGrafo {
 	private String nome;
 	private String linha;
 	private double velocidadeMaxima;
-	private double velocidade;
+	private double velocidadeMedia;
 	private double tamanho;
 	private int numero;
 	private ElementoGrafo proximo;
@@ -18,7 +18,7 @@ public class Arco extends ElementoGrafo {
 		this.nome = nome;
 		this.linha = linha;
 		this.velocidadeMaxima = velocidadeMaxima;
-		this.velocidade = velocidadeMaxima;
+		this.velocidadeMedia = velocidadeMaxima;
 		this.tamanho = tamanho;
 		this.numero = Integer.parseInt(nome.substring(1));
 		this.status = StatusEnum.NORMAL;
@@ -31,7 +31,7 @@ public class Arco extends ElementoGrafo {
 		this.tamanho = tamanho;
 		this.numero = Integer.parseInt(nome.substring(1));
 		this.velocidadeMaxima = Parametros.VELOCIDADE_MAXIMA_60_KM_POR_HORA;
-		this.velocidade = Parametros.VELOCIDADE_MAXIMA_60_KM_POR_HORA;
+		this.velocidadeMedia = Parametros.VELOCIDADE_MAXIMA_60_KM_POR_HORA;
 		this.status = StatusEnum.NORMAL;
 	}
 
@@ -112,12 +112,12 @@ public class Arco extends ElementoGrafo {
 		this.proximo = proximo;
 	}
 
-	public double getVelocidade() {
-		return velocidade;
+	public double getVelocidadeMedia() {
+		return velocidadeMedia;
 	}
 
-	public void setVelocidade(double velocidade) {
-		this.velocidade = velocidade;
+	public void setVelocidadeMedia(double velocidade) {
+		this.velocidadeMedia = velocidade;
 	}
 
 	public StatusEnum getStatus() {

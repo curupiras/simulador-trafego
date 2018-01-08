@@ -43,7 +43,7 @@ public class PosicaoDao {
 
 			ps.setString(1, onibus.getNome());
 			ps.setString(2, onibus.getLinha().getNome());
-			ps.setDouble(3, onibus.getElementoGrafo().getVelocidade());
+			ps.setDouble(3, onibus.getVelocidade());
 			ps.setString(4, onibus.getElementoGrafo().getNome());
 
 			ps.execute();
@@ -82,7 +82,7 @@ public class PosicaoDao {
 
 			ps.setString(1, onibus.getNome());
 			ps.setString(2, onibus.getLinha().getNome());
-			ps.setDouble(3, onibus.getElementoGrafo().getVelocidade());
+			ps.setDouble(3, onibus.getVelocidade());
 			ps.setDouble(4, onibus.getPosicao());
 			ps.setInt(5, onibus.getElementoGrafo().getNumero());
 

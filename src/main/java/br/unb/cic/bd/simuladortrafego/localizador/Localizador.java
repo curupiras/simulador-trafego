@@ -37,7 +37,7 @@ public class Localizador {
 		
 		dtoOnibus.setNome(onibus.getNome());
 		dtoOnibus.setLinha(onibus.getLinha().getNome());
-		dtoOnibus.setVelocidade(onibus.getElementoGrafo().getVelocidade());
+		dtoOnibus.setVelocidade(onibus.getVelocidade());
 		dtoOnibus.setDataHora(simpleDateFormat.format(onibus.getHoraAtualizacao()));
 		dtoOnibus.setLatitude(onibus.getLatitude());
 		dtoOnibus.setLongitude(onibus.getLongitude());

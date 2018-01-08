@@ -11,7 +11,7 @@ public final class Parametros {
 	public static final double FATOR_DE_OSCILACAO_DO_ATRASO = 0.1;
 	
 	public static final double PROBABILIDADE_DE_OCORRENCIA_DE_EVENTO_GRAVE = 0.01;
-	public static final double PROBABILIDADE_DE_OCORRENCIA_DE_EVENTO_MODERADO = 0.2;
+	public static final double PROBABILIDADE_DE_OCORRENCIA_DE_EVENTO_MODERADO = 0.02;
 	public static final double PROBABILIDADE_DE_OCORRENCIA_DE_EVENTO_LEVE = 0.1;
 	
 	public static final double PROBABILIDADE_DE_ENCERRAMENTO_DE_EVENTO_GRAVE = 0.1;
