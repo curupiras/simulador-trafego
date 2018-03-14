@@ -9,6 +9,7 @@ public class No extends ElementoGrafo {
 	private double atraso;
 	private int numero;
 	private ElementoGrafo proximo;
+	private ElementoGrafo anterior;
 
 	public No(String linha, String nome, double atraso) {
 		super();
@@ -84,6 +85,14 @@ public class No extends ElementoGrafo {
 
 	public void setProximo(ElementoGrafo proximo) {
 		this.proximo = proximo;
+	}
+
+	public ElementoGrafo getAnterior() {
+		return anterior;
+	}
+
+	public void setAnterior(ElementoGrafo anterior) {
+		this.anterior = anterior;
 	}
 
 	@Override

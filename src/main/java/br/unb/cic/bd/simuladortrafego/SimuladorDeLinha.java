@@ -5,6 +5,7 @@ import java.util.List;
 
 import br.unb.cic.bd.simuladortrafego.grafo.Arco;
 import br.unb.cic.bd.simuladortrafego.grafo.ArcoDao;
+import br.unb.cic.bd.simuladortrafego.grafo.InfluenciaEnum;
 import br.unb.cic.bd.simuladortrafego.grafo.No;
 import br.unb.cic.bd.simuladortrafego.grafo.StatusEnum;
 import br.unb.cic.bd.simuladortrafego.linha.Linha;
@@ -21,6 +22,7 @@ public class SimuladorDeLinha implements Runnable {
 
 	public synchronized void run() {
 		atualizaStatusDosArcos();
+		atualizaInfluenciaDeVisinhos();
 		atualizaVelocidadesDosArcos();
 		atualizaAtrasosDosNos();
 		atualizaVelocidadesNoBanco();
@@ -43,6 +45,28 @@ public class SimuladorDeLinha implements Runnable {
 			}
 
 			arco.setStatus(status);
+		}
+	}
+
+	private void atualizaInfluenciaDeVisinhos() {
+		List<Arco> arcos = linha.getArcos();
+		for (Arco arco : arcos) {
+			if (arco.getStatus() == StatusEnum.EVENTO_GRAVE) {
+				continue;
+			}
+			Arco proximoArco = arco.getProximoArco();
+			Arco aposProximoArco = proximoArco.getProximoArco();
+			Arco arcoAnterior = arco.getArcoAnterior();
+
+			if (proximoArco.getStatus() == StatusEnum.EVENTO_GRAVE) {
+				arco.setInfluencia(InfluenciaEnum.INFLUENCIA_FORTE);
+			} else if (aposProximoArco.getStatus() == StatusEnum.EVENTO_GRAVE) {
+				arco.setInfluencia(InfluenciaEnum.INFLUENCIA_MODERADA);
+			} else if (arcoAnterior.getStatus() == StatusEnum.EVENTO_GRAVE) {
+				arco.setInfluencia(InfluenciaEnum.INFLUENCIA_LEVE);
+			} else {
+				arco.setInfluencia(InfluenciaEnum.INFLUENCIA_AUSENTE);
+			}
 		}
 	}
 
@@ -86,11 +110,17 @@ public class SimuladorDeLinha implements Runnable {
 		for (Arco arco : arcos) {
 			double velocidadeMaxima = arco.getVelocidadeMaxima();
 			StatusEnum status = arco.getStatus();
+			InfluenciaEnum influencia = arco.getInfluencia();
 			double velocidade;
+
 			velocidade = velocidadeMaxima * status.fatorDeCorrecao();
+
 			if (isHorarioDePico()) {
 				velocidade = velocidade * Parametros.FATOR_DE_CORRECAO_HORARIO_DE_PICO;
 			}
+
+			velocidade = velocidade * influencia.fatorDeCorrecao();
+
 			arco.setVelocidadeMedia(velocidade);
 		}
 	}

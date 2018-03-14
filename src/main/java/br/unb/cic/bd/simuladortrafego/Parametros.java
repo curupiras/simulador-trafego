@@ -7,6 +7,10 @@ public final class Parametros {
 	public static final double FATOR_DE_CORRECAO_MODERADO = 0.50;
 	public static final double FATOR_DE_CORRECAO_LEVE = 0.75;
 	public static final double FATOR_DE_CORRECAO_HORARIO_DE_PICO = 0.60;
+	public static final double FATOR_DE_INFLUENCIA_LEVE = 0.80;
+	public static final double FATOR_DE_INFLUENCIA_MODERADO = 0.6;
+	public static final double FATOR_DE_INFLUENCIA_FORTE = 0.4;
+	public static final double FATOR_DE_INFLUENCIA_AUSENTE = 1;
 	public static final double FATOR_DE_OSCILACAO_DA_VELOCIDADE = 0.1;
 	public static final double FATOR_DE_OSCILACAO_DO_ATRASO = 0.1;
 	

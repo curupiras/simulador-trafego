@@ -27,12 +27,21 @@ public class Linha {
 		for (int i = 0; i < nos.size(); i++) {
 			nos.get(i).setProximo(arcos.get(i));
 		}
+		
+		for(int i = 0; i < arcos.size(); i++){
+			arcos.get(i).setAnterior(nos.get(i));
+		}
+		
+		for(int i = 1; i < nos.size(); i++){
+			nos.get(i).setAnterior(arcos.get(i-1));
+		}
 
 		for (int i = 0; i < arcos.size() - 1; i++) {
 			arcos.get(i).setProximo(nos.get(i + 1));
 		}
 		
 		arcos.get(arcos.size() - 1).setProximo(nos.get(0));
+		nos.get(0).setAnterior(arcos.get(arcos.size()-1));
 
 	}
 

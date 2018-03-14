@@ -11,7 +11,9 @@ public class Arco extends ElementoGrafo {
 	private double tamanho;
 	private int numero;
 	private ElementoGrafo proximo;
+	private ElementoGrafo anterior;
 	private StatusEnum status;
+	private InfluenciaEnum influencia;
 
 	public Arco(String linha, String nome, double velocidadeMaxima, double tamanho) {
 		super();
@@ -22,6 +24,7 @@ public class Arco extends ElementoGrafo {
 		this.tamanho = tamanho;
 		this.numero = Integer.parseInt(nome.substring(1));
 		this.status = StatusEnum.NORMAL;
+		this.influencia = InfluenciaEnum.INFLUENCIA_AUSENTE;
 	}
 
 	public Arco(String linha, String nome, double tamanho) {
@@ -33,6 +36,7 @@ public class Arco extends ElementoGrafo {
 		this.velocidadeMaxima = Parametros.VELOCIDADE_MAXIMA_60_KM_POR_HORA;
 		this.velocidadeMedia = Parametros.VELOCIDADE_MAXIMA_60_KM_POR_HORA;
 		this.status = StatusEnum.NORMAL;
+		this.influencia = InfluenciaEnum.INFLUENCIA_AUSENTE;
 	}
 
 	public String getLinha() {
@@ -80,6 +84,14 @@ public class Arco extends ElementoGrafo {
 		this.numero = numero;
 	}
 
+	public InfluenciaEnum getInfluencia() {
+		return influencia;
+	}
+
+	public void setInfluencia(InfluenciaEnum influencia) {
+		this.influencia = influencia;
+	}
+
 	@Override
 	public void consomeTempo(DtoTempoPosicao tempoPosicao) {
 		double tempo = tempoPosicao.getTempo();
@@ -97,11 +109,11 @@ public class Arco extends ElementoGrafo {
 	}
 
 	private double calcularDistancia(double tempo) {
-		return this.velocidadeMaxima * Parametros.KILOMETROS_POR_HORA_PARA_METROS_POR_SEGUNDO * tempo;
+		return this.velocidadeMedia * Parametros.KILOMETROS_POR_HORA_PARA_METROS_POR_SEGUNDO * tempo;
 	}
 
 	private double calcularTempo(double distancia) {
-		return distancia / (this.velocidadeMaxima * Parametros.KILOMETROS_POR_HORA_PARA_METROS_POR_SEGUNDO);
+		return distancia / (this.velocidadeMedia * Parametros.KILOMETROS_POR_HORA_PARA_METROS_POR_SEGUNDO);
 	}
 
 	public ElementoGrafo getProximo() {
@@ -110,6 +122,14 @@ public class Arco extends ElementoGrafo {
 
 	public void setProximo(ElementoGrafo proximo) {
 		this.proximo = proximo;
+	}
+
+	public ElementoGrafo getAnterior() {
+		return anterior;
+	}
+
+	public void setAnterior(ElementoGrafo anterior) {
+		this.anterior = anterior;
 	}
 
 	public double getVelocidadeMedia() {
@@ -126,6 +146,14 @@ public class Arco extends ElementoGrafo {
 
 	public void setStatus(StatusEnum status) {
 		this.status = status;
+	}
+
+	public Arco getProximoArco() {
+		return (Arco) this.getProximo().getProximo();
+	}
+
+	public Arco getArcoAnterior() {
+		return (Arco) this.getAnterior().getAnterior();
 	}
 
 }

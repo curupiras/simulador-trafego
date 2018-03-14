@@ -36,7 +36,7 @@ public class Frota {
 		inserirLinha(l1);
 
 		Onibus o1 = new Onibus("O1", l1, l1.getArcos().get(1), 0);
-		Onibus o2 = new Onibus("O2", l1, l1.getArcos().get(1), 0.3);
+		Onibus o2 = new Onibus("O2", l1, l1.getArcos().get(6), 0.3);
 		inserirOnibus(o1);
 		inserirOnibus(o2);
 

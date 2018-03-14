@@ -8,6 +8,8 @@ public abstract class ElementoGrafo {
 	
 	public abstract ElementoGrafo getProximo();
 	
+	public abstract ElementoGrafo getAnterior();
+	
 	public abstract double getVelocidadeMedia();
 	
 	public abstract String getNome();
