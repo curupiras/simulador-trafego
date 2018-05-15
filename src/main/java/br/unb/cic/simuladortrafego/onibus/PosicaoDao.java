@@ -1,4 +1,4 @@
-package br.unb.cic.bd.simuladortrafego.onibus;
+package br.unb.cic.simuladortrafego.onibus;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -10,7 +10,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Component;
 
-import br.unb.cic.bd.simuladortrafego.grafo.Arco;
+import br.unb.cic.simuladortrafego.grafo.Arco;
 
 @Component
 public class PosicaoDao {

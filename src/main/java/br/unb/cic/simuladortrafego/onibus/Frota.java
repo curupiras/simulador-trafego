@@ -1,4 +1,4 @@
-package br.unb.cic.bd.simuladortrafego.onibus;
+package br.unb.cic.simuladortrafego.onibus;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,10 +12,10 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Component;
 
-import br.unb.cic.bd.simuladortrafego.Parametros;
-import br.unb.cic.bd.simuladortrafego.SimuladorDeLinha;
-import br.unb.cic.bd.simuladortrafego.SimuladorDeViagem;
-import br.unb.cic.bd.simuladortrafego.linha.Linha;
+import br.unb.cic.simuladortrafego.Parametros;
+import br.unb.cic.simuladortrafego.SimuladorDeLinha;
+import br.unb.cic.simuladortrafego.SimuladorDeViagem;
+import br.unb.cic.simuladortrafego.linha.Linha;
 
 @Component
 public class Frota {

@@ -1,11 +1,11 @@
-package br.unb.cic.bd.simuladortrafego.linha;
+package br.unb.cic.simuladortrafego.linha;
 
 import java.util.List;
 
-import br.unb.cic.bd.simuladortrafego.grafo.Arco;
-import br.unb.cic.bd.simuladortrafego.grafo.ArcoDao;
-import br.unb.cic.bd.simuladortrafego.grafo.No;
-import br.unb.cic.bd.simuladortrafego.grafo.NoDao;
+import br.unb.cic.simuladortrafego.grafo.Arco;
+import br.unb.cic.simuladortrafego.grafo.ArcoDao;
+import br.unb.cic.simuladortrafego.grafo.No;
+import br.unb.cic.simuladortrafego.grafo.NoDao;
 
 public class Linha {
 

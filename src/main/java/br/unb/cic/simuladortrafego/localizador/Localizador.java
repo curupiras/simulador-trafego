@@ -1,4 +1,4 @@
-package br.unb.cic.bd.simuladortrafego.localizador;
+package br.unb.cic.simuladortrafego.localizador;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -7,10 +7,10 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import br.unb.cic.bd.simuladortrafego.onibus.DtoFrota;
-import br.unb.cic.bd.simuladortrafego.onibus.DtoOnibus;
-import br.unb.cic.bd.simuladortrafego.onibus.Frota;
-import br.unb.cic.bd.simuladortrafego.onibus.Onibus;
+import br.unb.cic.simuladortrafego.onibus.DtoFrota;
+import br.unb.cic.simuladortrafego.onibus.DtoOnibus;
+import br.unb.cic.simuladortrafego.onibus.Frota;
+import br.unb.cic.simuladortrafego.onibus.Onibus;
 
 @Component
 public class Localizador {

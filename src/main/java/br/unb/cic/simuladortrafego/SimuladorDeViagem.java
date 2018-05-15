@@ -1,9 +1,9 @@
-package br.unb.cic.bd.simuladortrafego;
+package br.unb.cic.simuladortrafego;
 
 import java.util.Date;
 
-import br.unb.cic.bd.simuladortrafego.onibus.Onibus;
-import br.unb.cic.bd.simuladortrafego.onibus.PosicaoDao;
+import br.unb.cic.simuladortrafego.onibus.Onibus;
+import br.unb.cic.simuladortrafego.onibus.PosicaoDao;
 
 public class SimuladorDeViagem implements Runnable {
 	

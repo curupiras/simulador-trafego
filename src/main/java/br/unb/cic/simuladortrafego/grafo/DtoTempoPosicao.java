@@ -1,4 +1,4 @@
-package br.unb.cic.bd.simuladortrafego.grafo;
+package br.unb.cic.simuladortrafego.grafo;
 
 public class DtoTempoPosicao {
 	private double tempo;

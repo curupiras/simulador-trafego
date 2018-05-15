@@ -1,10 +1,10 @@
-package br.unb.cic.bd.simuladortrafego.onibus;
+package br.unb.cic.simuladortrafego.onibus;
 
 import java.util.Date;
 
-import br.unb.cic.bd.simuladortrafego.grafo.DtoTempoPosicao;
-import br.unb.cic.bd.simuladortrafego.grafo.ElementoGrafo;
-import br.unb.cic.bd.simuladortrafego.linha.Linha;
+import br.unb.cic.simuladortrafego.grafo.DtoTempoPosicao;
+import br.unb.cic.simuladortrafego.grafo.ElementoGrafo;
+import br.unb.cic.simuladortrafego.linha.Linha;
 
 public class Onibus {
 

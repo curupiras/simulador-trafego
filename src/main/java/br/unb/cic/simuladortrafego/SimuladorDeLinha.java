@@ -1,14 +1,14 @@
-package br.unb.cic.bd.simuladortrafego;
+package br.unb.cic.simuladortrafego;
 
 import java.util.Calendar;
 import java.util.List;
 
-import br.unb.cic.bd.simuladortrafego.grafo.Arco;
-import br.unb.cic.bd.simuladortrafego.grafo.ArcoDao;
-import br.unb.cic.bd.simuladortrafego.grafo.InfluenciaEnum;
-import br.unb.cic.bd.simuladortrafego.grafo.No;
-import br.unb.cic.bd.simuladortrafego.grafo.StatusEnum;
-import br.unb.cic.bd.simuladortrafego.linha.Linha;
+import br.unb.cic.simuladortrafego.grafo.Arco;
+import br.unb.cic.simuladortrafego.grafo.ArcoDao;
+import br.unb.cic.simuladortrafego.grafo.InfluenciaEnum;
+import br.unb.cic.simuladortrafego.grafo.No;
+import br.unb.cic.simuladortrafego.grafo.StatusEnum;
+import br.unb.cic.simuladortrafego.linha.Linha;
 
 public class SimuladorDeLinha implements Runnable {
 

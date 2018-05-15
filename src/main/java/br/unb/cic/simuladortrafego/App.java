@@ -1,4 +1,4 @@
-package br.unb.cic.bd.simuladortrafego;
+package br.unb.cic.simuladortrafego;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

@@ -1,6 +1,6 @@
-package br.unb.cic.bd.simuladortrafego.grafo;
+package br.unb.cic.simuladortrafego.grafo;
 
-import br.unb.cic.bd.simuladortrafego.Parametros;
+import br.unb.cic.simuladortrafego.Parametros;
 
 public class Arco extends ElementoGrafo {
 

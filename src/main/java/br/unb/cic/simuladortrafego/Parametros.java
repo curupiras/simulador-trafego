@@ -1,4 +1,4 @@
-package br.unb.cic.bd.simuladortrafego;
+package br.unb.cic.simuladortrafego;
 
 public final class Parametros {
 	
