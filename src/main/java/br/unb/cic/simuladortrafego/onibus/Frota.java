@@ -12,7 +12,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Component;
 
-import br.unb.cic.simuladortrafego.Parametros;
+import br.unb.cic.parametros.Parametros;
 import br.unb.cic.simuladortrafego.SimuladorDeLinha;
 import br.unb.cic.simuladortrafego.SimuladorDeViagem;
 import br.unb.cic.simuladortrafego.linha.Linha;

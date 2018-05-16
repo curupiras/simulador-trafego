@@ -2,6 +2,7 @@ package br.unb.cic.simuladortrafego;
 
 import java.util.Date;
 
+import br.unb.cic.parametros.Parametros;
 import br.unb.cic.simuladortrafego.onibus.Onibus;
 import br.unb.cic.simuladortrafego.onibus.PosicaoDao;
 

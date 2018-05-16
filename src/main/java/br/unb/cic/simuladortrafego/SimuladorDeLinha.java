@@ -3,6 +3,7 @@ package br.unb.cic.simuladortrafego;
 import java.util.Calendar;
 import java.util.List;
 
+import br.unb.cic.parametros.Parametros;
 import br.unb.cic.simuladortrafego.grafo.Arco;
 import br.unb.cic.simuladortrafego.grafo.ArcoDao;
 import br.unb.cic.simuladortrafego.grafo.InfluenciaEnum;
