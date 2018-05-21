@@ -5,6 +5,7 @@ import java.util.Date;
 import br.unb.cic.simuladortrafego.grafo.DtoTempoPosicao;
 import br.unb.cic.simuladortrafego.grafo.ElementoGrafo;
 import br.unb.cic.simuladortrafego.linha.Linha;
+import br.unb.cic.simuladortrafego.util.Util;
 
 public class Onibus {
 
@@ -23,6 +24,7 @@ public class Onibus {
 		this.elementoGrafo = elementoGrafo;
 		this.posicaoNoElementoGrafo = posicao;
 		this.horaAtualizacao = new Date();
+		Util.atualizarVelocidade(this);
 	}
 
 	public Linha getLinha() {
@@ -88,13 +90,15 @@ public class Onibus {
 
 	public void deslocar(long tempo) {
 
-		DtoTempoPosicao tempoPosicao = new DtoTempoPosicao(tempo, this.posicaoNoElementoGrafo);
+		DtoTempoPosicao tempoPosicao = new DtoTempoPosicao(tempo, this.posicaoNoElementoGrafo, this.velocidade);
 
 		while (tempoPosicao.getTempo() > 0) {
 			elementoGrafo.consomeTempo(tempoPosicao);
 			if (tempoPosicao.getPosicao() == 1) {
 				elementoGrafo = elementoGrafo.getProximo();
 				tempoPosicao.setPosicao(0);
+				Util.atualizarVelocidade(this);
+				tempoPosicao.setVelocidade(this.velocidade);
 			}
 		}
 

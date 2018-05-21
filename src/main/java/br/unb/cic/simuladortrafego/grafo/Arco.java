@@ -96,24 +96,25 @@ public class Arco extends ElementoGrafo {
 	public void consomeTempo(DtoTempoPosicao tempoPosicao) {
 		double tempo = tempoPosicao.getTempo();
 		double posicao = tempoPosicao.getPosicao();
+		double velocidade = tempoPosicao.getVelocidade();
 		double distanciaRemanescente = tamanho - tamanho * posicao;
 
-		if (distanciaRemanescente <= calcularDistancia(tempo)) {
-			tempoPosicao.setTempo(tempo - calcularTempo(distanciaRemanescente));
+		if (distanciaRemanescente <= calcularDistancia(tempo, velocidade)) {
+			tempoPosicao.setTempo(tempo - calcularTempo(distanciaRemanescente, velocidade));
 			tempoPosicao.setPosicao(1);
 		} else {
 			tempoPosicao.setTempo(0);
-			tempoPosicao.setPosicao(posicao + calcularDistancia(tempo) / tamanho);
+			tempoPosicao.setPosicao(posicao + calcularDistancia(tempo, velocidade) / tamanho);
 		}
 
 	}
 
-	private double calcularDistancia(double tempo) {
-		return this.velocidadeMedia * Parametros.KILOMETROS_POR_HORA_PARA_METROS_POR_SEGUNDO * tempo;
+	private double calcularDistancia(double tempo, double velocidade) {
+		return velocidade * Parametros.KILOMETROS_POR_HORA_PARA_METROS_POR_SEGUNDO * tempo;
 	}
 
-	private double calcularTempo(double distancia) {
-		return distancia / (this.velocidadeMedia * Parametros.KILOMETROS_POR_HORA_PARA_METROS_POR_SEGUNDO);
+	private double calcularTempo(double distancia, double velocidade) {
+		return distancia / (velocidade * Parametros.KILOMETROS_POR_HORA_PARA_METROS_POR_SEGUNDO);
 	}
 
 	public ElementoGrafo getProximo() {

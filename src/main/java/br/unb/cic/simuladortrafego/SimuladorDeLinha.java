@@ -3,6 +3,8 @@ package br.unb.cic.simuladortrafego;
 import java.util.Calendar;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import br.unb.cic.parametros.Parametros;
 import br.unb.cic.simuladortrafego.grafo.Arco;
 import br.unb.cic.simuladortrafego.grafo.ArcoDao;
@@ -12,6 +14,8 @@ import br.unb.cic.simuladortrafego.grafo.StatusEnum;
 import br.unb.cic.simuladortrafego.linha.Linha;
 
 public class SimuladorDeLinha implements Runnable {
+	
+	private static final Logger logger = Logger.getLogger( SimuladorDeLinha.class.getName() );
 
 	private Linha linha;
 	private ArcoDao arcoDao;
@@ -22,11 +26,13 @@ public class SimuladorDeLinha implements Runnable {
 	}
 
 	public synchronized void run() {
+		logger.info("Início da simulação de linha.");
 		atualizaStatusDosArcos();
 		atualizaInfluenciaDeVisinhos();
 		atualizaVelocidadesDosArcos();
 		atualizaAtrasosDosNos();
 		atualizaVelocidadesNoBanco();
+		logger.info("Fim da simulação de linha.");
 	}
 
 	private void atualizaVelocidadesNoBanco() {
@@ -138,22 +144,22 @@ public class SimuladorDeLinha implements Runnable {
 
 	private boolean isHorarioDePico() {
 		Calendar inferiorMatutino = Calendar.getInstance();
-		inferiorMatutino.set(Calendar.HOUR, Parametros.LIMITE_INFERIOR_HORA_DE_PICO_MATUTINO);
+		inferiorMatutino.set(Calendar.HOUR_OF_DAY, Parametros.LIMITE_INFERIOR_HORA_DE_PICO_MATUTINO);
 		inferiorMatutino.set(Calendar.MINUTE, Parametros.LIMITE_INFERIOR_MINUTO_DE_PICO_MATUTINO);
 		inferiorMatutino.set(Calendar.SECOND, 0);
 
 		Calendar superiorMatutino = Calendar.getInstance();
-		superiorMatutino.set(Calendar.HOUR, Parametros.LIMITE_SUPERIOR_HORA_DE_PICO_MATUTINO);
+		superiorMatutino.set(Calendar.HOUR_OF_DAY, Parametros.LIMITE_SUPERIOR_HORA_DE_PICO_MATUTINO);
 		superiorMatutino.set(Calendar.MINUTE, Parametros.LIMITE_SUPERIOR_MINUTO_DE_PICO_MATUTINO);
 		superiorMatutino.set(Calendar.SECOND, 0);
 
 		Calendar inferiorVespertino = Calendar.getInstance();
-		inferiorVespertino.set(Calendar.HOUR, Parametros.LIMITE_INFERIOR_HORA_DE_PICO_VESPERTINO);
+		inferiorVespertino.set(Calendar.HOUR_OF_DAY, Parametros.LIMITE_INFERIOR_HORA_DE_PICO_VESPERTINO);
 		inferiorVespertino.set(Calendar.MINUTE, Parametros.LIMITE_INFERIOR_MINUTO_DE_PICO_VESPERTINO);
 		inferiorVespertino.set(Calendar.SECOND, 0);
 
 		Calendar superiorVespertino = Calendar.getInstance();
-		superiorVespertino.set(Calendar.HOUR, Parametros.LIMITE_SUPERIOR_HORA_DE_PICO_VESPERTINO);
+		superiorVespertino.set(Calendar.HOUR_OF_DAY, Parametros.LIMITE_SUPERIOR_HORA_DE_PICO_VESPERTINO);
 		superiorVespertino.set(Calendar.MINUTE, Parametros.LIMITE_SUPERIOR_MINUTO_DE_PICO_VESPERTINO);
 		superiorVespertino.set(Calendar.SECOND, 0);
 
