@@ -9,8 +9,8 @@ import br.unb.cic.simuladortrafego.onibus.Onibus;
 import br.unb.cic.simuladortrafego.onibus.PosicaoDao;
 
 public class SimuladorDeViagem implements Runnable {
-	
-	private static final Logger logger = Logger.getLogger( SimuladorDeViagem.class.getName() );
+
+	private static final Logger logger = Logger.getLogger(SimuladorDeViagem.class.getName());
 
 	private PosicaoDao posicaoDao;
 	private Onibus onibus;
@@ -21,12 +21,14 @@ public class SimuladorDeViagem implements Runnable {
 	}
 
 	public synchronized void run() {
-		logger.info("Início da simulação de Viagem.");
-		atualizarPosicao();
-		atualizarVelocidade();
-		long chave = posicaoDao.inserePosicao(onibus);
-		posicaoDao.atualizaLatitudeLongitude(chave, onibus);
-		logger.info("Fim da simulação de Viagem.");
+		logger.debug("Início da simulação de Viagem.");
+		synchronized (onibus) {
+			atualizarPosicao();
+			atualizarVelocidade();
+			long chave = posicaoDao.inserePosicao(onibus);
+			posicaoDao.atualizaLatitudeLongitude(chave, onibus);
+		}
+		logger.debug("Fim da simulação de Viagem.");
 	}
 
 	private void atualizarPosicao() {

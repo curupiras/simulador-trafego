@@ -65,7 +65,7 @@ public class No extends ElementoGrafo {
 	}
 
 	@Override
-	public void consomeTempo(DtoTempoPosicao tempoPosicao) {
+	public double consomeTempo(DtoTempoPosicao tempoPosicao) {
 		double tempo = tempoPosicao.getTempo();
 		double posicao = tempoPosicao.getPosicao();
 		double atrasoRemanescente = atraso - atraso * posicao;
@@ -73,9 +73,11 @@ public class No extends ElementoGrafo {
 		if (atrasoRemanescente <= tempo) {
 			tempoPosicao.setTempo(tempo - atrasoRemanescente);
 			tempoPosicao.setPosicao(1);
+			return atrasoRemanescente;
 		} else {
 			tempoPosicao.setTempo(0);
 			tempoPosicao.setPosicao(posicao + tempo / atraso);
+			return tempo;
 		}
 	}
 

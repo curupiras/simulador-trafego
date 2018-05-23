@@ -26,13 +26,13 @@ public class SimuladorDeLinha implements Runnable {
 	}
 
 	public synchronized void run() {
-		logger.info("Início da simulação de linha.");
+		logger.debug("Início da simulação de linha.");
 		atualizaStatusDosArcos();
 		atualizaInfluenciaDeVisinhos();
 		atualizaVelocidadesDosArcos();
 		atualizaAtrasosDosNos();
 		atualizaVelocidadesNoBanco();
-		logger.info("Fim da simulação de linha.");
+		logger.debug("Fim da simulação de linha.");
 	}
 
 	private void atualizaVelocidadesNoBanco() {

@@ -2,7 +2,7 @@ package br.unb.cic.simuladortrafego.grafo;
 
 public abstract class ElementoGrafo {
 
-	public abstract void consomeTempo(DtoTempoPosicao tempoPosicao);
+	public abstract double consomeTempo(DtoTempoPosicao tempoPosicao);
 	
 	public abstract int getNumero();
 	

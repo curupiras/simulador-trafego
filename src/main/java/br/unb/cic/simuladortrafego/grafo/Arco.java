@@ -93,18 +93,21 @@ public class Arco extends ElementoGrafo {
 	}
 
 	@Override
-	public void consomeTempo(DtoTempoPosicao tempoPosicao) {
+	public double consomeTempo(DtoTempoPosicao tempoPosicao) {
 		double tempo = tempoPosicao.getTempo();
 		double posicao = tempoPosicao.getPosicao();
 		double velocidade = tempoPosicao.getVelocidade();
 		double distanciaRemanescente = tamanho - tamanho * posicao;
 
 		if (distanciaRemanescente <= calcularDistancia(tempo, velocidade)) {
-			tempoPosicao.setTempo(tempo - calcularTempo(distanciaRemanescente, velocidade));
+			double tempoGasto = calcularTempo(distanciaRemanescente, velocidade);
+			tempoPosicao.setTempo(tempo - tempoGasto);
 			tempoPosicao.setPosicao(1);
+			return tempoGasto;
 		} else {
 			tempoPosicao.setTempo(0);
 			tempoPosicao.setPosicao(posicao + calcularDistancia(tempo, velocidade) / tamanho);
+			return tempo;
 		}
 
 	}

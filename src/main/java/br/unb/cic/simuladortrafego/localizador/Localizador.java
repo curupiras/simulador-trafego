@@ -18,15 +18,15 @@ public class Localizador {
 	@Autowired
 	private Frota frota;
 
-	public DtoFrota recuperarLocalizaçãoDaFrota(){
+	public DtoFrota recuperarLocalizaçãoDaFrota() {
 		List<Onibus> lista = frota.getLista();
 		List<DtoOnibus> listaDto = new ArrayList<>();
 		DtoFrota dtoFrota = new DtoFrota();
-		
+
 		for (Onibus onibus : lista) {
 			listaDto.add(getDtoOnibus(onibus));
 		}
-		
+
 		dtoFrota.setFrota(listaDto);
 		return dtoFrota;
 	}
@@ -34,14 +34,16 @@ public class Localizador {
 	private DtoOnibus getDtoOnibus(Onibus onibus) {
 		DtoOnibus dtoOnibus = new DtoOnibus();
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-		
-		dtoOnibus.setNome(onibus.getNome());
-		dtoOnibus.setLinha(onibus.getLinha().getNome());
-		dtoOnibus.setVelocidade(onibus.getVelocidade());
-		dtoOnibus.setDataHora(simpleDateFormat.format(onibus.getHoraAtualizacao()));
-		dtoOnibus.setLatitude(onibus.getLatitude());
-		dtoOnibus.setLongitude(onibus.getLongitude());
-		
+
+		synchronized (onibus) {
+			dtoOnibus.setNome(onibus.getNome());
+			dtoOnibus.setLinha(onibus.getLinha().getNome());
+			dtoOnibus.setVelocidade(onibus.getVelocidade());
+			dtoOnibus.setDataHora(simpleDateFormat.format(onibus.getHoraAtualizacao()));
+			dtoOnibus.setLatitude(onibus.getLatitude());
+			dtoOnibus.setLongitude(onibus.getLongitude());
+		}
+
 		return dtoOnibus;
 	}
 
