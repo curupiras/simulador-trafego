@@ -77,7 +77,7 @@ public class PosicaoDao {
 
 			PreparedStatement ps = conn.prepareStatement(
 					"INSERT INTO posicao (datahora, onibus, linha, velocidade, geo_ponto_rede_pto) "
-							+ "(SELECT now(), ?, ?, ?, ST_Line_Interpolate_Point(geo_linhas_lin, ?)::geometry FROM arco where fid = ?)",
+							+ "(SELECT now(), ?, ?, ?, ST_Line_Interpolate_Point(ST_LineMerge(geo_linhas_lin), ?)::geometry FROM arco where fid = ?)",
 					Statement.RETURN_GENERATED_KEYS);
 
 			ps.setString(1, onibus.getNome());

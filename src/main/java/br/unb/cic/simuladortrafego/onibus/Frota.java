@@ -35,7 +35,7 @@ public class Frota {
 		Linha l1 = new Linha("CIRCULAR-W3-SUL-NORTE-L2-NORTE-SUL");
 		inserirLinha(l1);
 
-		Onibus o1 = new Onibus("O1", l1, l1.getArcos().get(1), 0);
+		Onibus o1 = new Onibus("O1", l1, l1.getArcos().get(80), 0);
 //		Onibus o2 = new Onibus("O2", l1, l1.getArcos().get(6), 0.3);
 		inserirOnibus(o1);
 //		inserirOnibus(o2);
@@ -58,7 +58,7 @@ public class Frota {
 		for (Linha linha : listaLinhas) {
 			SimuladorDeLinha simulador = new SimuladorDeLinha(linha);
 			ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
-			executor.scheduleAtFixedRate(simulador, 0, Parametros.PERIODO_DE_ATUALIZACAO_DE_LINHA_EM_SEGUNDOS, TimeUnit.SECONDS);
+			executor.scheduleAtFixedRate(simulador, 5, Parametros.PERIODO_DE_ATUALIZACAO_DE_LINHA_EM_SEGUNDOS, TimeUnit.SECONDS);
 		}
 		
 	}

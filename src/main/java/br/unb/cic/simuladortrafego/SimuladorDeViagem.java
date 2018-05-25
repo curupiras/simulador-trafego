@@ -22,12 +22,13 @@ public class SimuladorDeViagem implements Runnable {
 
 	public synchronized void run() {
 		logger.debug("Início da simulação de Viagem.");
+		long chave = 0;
 		synchronized (onibus) {
 			atualizarPosicao();
 			atualizarVelocidade();
-			long chave = posicaoDao.inserePosicao(onibus);
-			posicaoDao.atualizaLatitudeLongitude(chave, onibus);
+			chave = posicaoDao.inserePosicao(onibus);
 		}
+		posicaoDao.atualizaLatitudeLongitude(chave, onibus);
 		logger.debug("Fim da simulação de Viagem.");
 	}
 
