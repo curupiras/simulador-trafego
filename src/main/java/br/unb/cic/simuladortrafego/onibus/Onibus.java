@@ -4,6 +4,8 @@ import java.util.Date;
 
 import org.apache.log4j.Logger;
 
+import br.unb.cic.simuladortrafego.dominio.tempoviagem.TempoViagem;
+import br.unb.cic.simuladortrafego.dominio.tempoviagem.TempoViagemDao;
 import br.unb.cic.simuladortrafego.grafo.DtoTempoPosicao;
 import br.unb.cic.simuladortrafego.grafo.ElementoGrafo;
 import br.unb.cic.simuladortrafego.linha.Linha;
@@ -22,6 +24,8 @@ public class Onibus {
 	private String longitude;
 	private double velocidade;
 
+	private TempoViagemDao tempoViagemDao;
+
 	// Atributos para debug
 	private double tempoAcumuladoDebug = 0;
 	private double tempoLocalDebug = 0;
@@ -33,6 +37,8 @@ public class Onibus {
 		this.posicaoNoElementoGrafo = posicao;
 		this.horaAtualizacao = new Date();
 		Util.atualizarVelocidade(this);
+
+		tempoViagemDao = new TempoViagemDao();
 	}
 
 	public Linha getLinha() {
@@ -104,12 +110,14 @@ public class Onibus {
 
 			tempoAcumuladoDebug = tempoAcumuladoDebug + tempoGasto;
 			tempoLocalDebug = tempoLocalDebug + tempoGasto;
-//			logger.info(elementoGrafo + ": " + tempoAcumuladoDebug + " s");
+			// logger.info(elementoGrafo + ": " + tempoAcumuladoDebug + " s");
 
 			if (tempoPosicao.getPosicao() == 1) {
 				logger.info("Tempo de viagem em " + elementoGrafo + ": " + tempoLocalDebug + " s");
+				TempoViagem tempoViagem = new TempoViagem(new Date(), elementoGrafo.getNome(), tempoLocalDebug);
+				tempoViagemDao.insereTempoViagem(tempoViagem);
 				tempoLocalDebug = 0;
-				
+
 				elementoGrafo = elementoGrafo.getProximo();
 				tempoPosicao.setPosicao(0);
 				Util.atualizarVelocidade(this);
