@@ -33,9 +33,9 @@ public class Localizador {
 
 	private DtoOnibus getDtoOnibus(Onibus onibus) {
 		DtoOnibus dtoOnibus = new DtoOnibus();
-		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 
 		synchronized (onibus) {
+			SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 			dtoOnibus.setNome(onibus.getNome());
 			dtoOnibus.setLinha(onibus.getLinha().getNome());
 			dtoOnibus.setVelocidade(onibus.getVelocidade());

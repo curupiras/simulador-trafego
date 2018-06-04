@@ -36,9 +36,16 @@ public class Frota {
 		inserirLinha(l1);
 
 		Onibus o1 = new Onibus("O1", l1, l1.getArcos().get(80), 0);
-//		Onibus o2 = new Onibus("O2", l1, l1.getArcos().get(6), 0.3);
+//		Onibus o2 = new Onibus("O2", l1, l1.getArcos().get(0), 0);
+//		Onibus o3 = new Onibus("O3", l1, l1.getArcos().get(40), 0);
+//		Onibus o4 = new Onibus("O4", l1, l1.getArcos().get(20), 0);
+//		Onibus o5 = new Onibus("O5", l1, l1.getArcos().get(60), 0);
+		
 		inserirOnibus(o1);
 //		inserirOnibus(o2);
+//		inserirOnibus(o3);
+//		inserirOnibus(o4);
+//		inserirOnibus(o5);
 
 		iniciarSimuladoresDeViagens();
 		iniciarSimuladoresDeLinhas();

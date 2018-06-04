@@ -27,8 +27,8 @@ public class SimuladorDeViagem implements Runnable {
 			atualizarPosicao();
 			atualizarVelocidade();
 			chave = posicaoDao.inserePosicao(onibus);
+			posicaoDao.atualizaLatitudeLongitude(chave, onibus);
 		}
-		posicaoDao.atualizaLatitudeLongitude(chave, onibus);
 		logger.debug("Fim da simulação de Viagem.");
 	}
 
