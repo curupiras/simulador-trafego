@@ -27,6 +27,11 @@ public class SimuladorDeViagem implements Runnable {
 			atualizarPosicao();
 			atualizarVelocidade();
 			chave = posicaoDao.inserePosicao(onibus);
+			
+			if(chave == 0){
+				logger.info("Problema ao inserrir posição.");
+			}
+			
 			posicaoDao.atualizaLatitudeLongitude(chave, onibus);
 		}
 		logger.debug("Fim da simulação de Viagem.");

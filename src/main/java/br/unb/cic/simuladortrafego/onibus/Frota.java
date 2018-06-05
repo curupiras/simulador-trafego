@@ -25,6 +25,7 @@ public class Frota {
 	Map<String, Linha> mapaLinhas;
 
 	private static final Log logger = LogFactory.getLog(Frota.class);
+	private static final int TAMANHO_FROTA = 82;
 
 	public Frota() {
 		listaOnibus = new ArrayList<>();
@@ -34,18 +35,23 @@ public class Frota {
 
 		Linha l1 = new Linha("CIRCULAR-W3-SUL-NORTE-L2-NORTE-SUL");
 		inserirLinha(l1);
-
-		Onibus o1 = new Onibus("O1", l1, l1.getArcos().get(80), 0);
-//		Onibus o2 = new Onibus("O2", l1, l1.getArcos().get(0), 0);
-//		Onibus o3 = new Onibus("O3", l1, l1.getArcos().get(40), 0);
-//		Onibus o4 = new Onibus("O4", l1, l1.getArcos().get(20), 0);
-//		Onibus o5 = new Onibus("O5", l1, l1.getArcos().get(60), 0);
 		
-		inserirOnibus(o1);
-//		inserirOnibus(o2);
-//		inserirOnibus(o3);
-//		inserirOnibus(o4);
-//		inserirOnibus(o5);
+		for(int i = 0 ; i < TAMANHO_FROTA; i++){
+			Onibus onibus = new Onibus("O"+(i+1), l1, l1.getArcos().get(i), 0);
+			inserirOnibus(onibus);
+		}
+
+		// Onibus o1 = new Onibus("O1", l1, l1.getArcos().get(80), 0);
+		// Onibus o2 = new Onibus("O2", l1, l1.getArcos().get(0), 0);
+		// Onibus o3 = new Onibus("O3", l1, l1.getArcos().get(40), 0);
+		// Onibus o4 = new Onibus("O4", l1, l1.getArcos().get(20), 0);
+		// Onibus o5 = new Onibus("O5", l1, l1.getArcos().get(60), 0);
+		//
+		// inserirOnibus(o1);
+		// inserirOnibus(o2);
+		// inserirOnibus(o3);
+		// inserirOnibus(o4);
+		// inserirOnibus(o5);
 
 		iniciarSimuladoresDeViagens();
 		iniciarSimuladoresDeLinhas();

@@ -21,12 +21,12 @@ public class PosicaoDao {
 	private static final Log logger = LogFactory.getLog(PosicaoDao.class);
 
 	public long inserePosicao(Onibus onibus) {
-		if(onibus.getElementoGrafo() instanceof Arco){
+		if (onibus.getElementoGrafo() instanceof Arco) {
 			return inserePosicaoArco(onibus);
-		}else{
+		} else {
 			return inserePosicaoNo(onibus);
 		}
-		
+
 	}
 
 	private long inserePosicaoNo(Onibus onibus) {
@@ -36,13 +36,14 @@ public class PosicaoDao {
 			Class.forName("org.postgresql.Driver");
 			String url = "jdbc:postgresql://localhost:5432/gerenciador";
 			this.conn = DriverManager.getConnection(url, "postgres", "curup1ras");
-			
+
 			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			String data = formatter.format(onibus.getHoraAtualizacao());
 
 			PreparedStatement ps = conn.prepareStatement(
 					"INSERT INTO posicao (datahora, onibus, linha, velocidade, geo_ponto_rede_pto) "
-							+ "(SELECT TIMESTAMP '"+ data +"', ?, ?, ?, geo_ponto_rede_pto::geometry FROM no where nome = ?)",
+							+ "(SELECT TIMESTAMP '" + data
+							+ "', ?, ?, ?, geo_ponto_rede_pto::geometry FROM no where nome = ?)",
 					Statement.RETURN_GENERATED_KEYS);
 
 			ps.setString(1, onibus.getNome());
@@ -56,6 +57,8 @@ public class PosicaoDao {
 
 			if (rs.next()) {
 				chave = rs.getInt(1);
+			}else{
+				logger.info("Posição em nó não inserida no banco: " + onibus);
 			}
 
 			ps.close();
@@ -78,13 +81,14 @@ public class PosicaoDao {
 			Class.forName("org.postgresql.Driver");
 			String url = "jdbc:postgresql://localhost:5432/gerenciador";
 			this.conn = DriverManager.getConnection(url, "postgres", "curup1ras");
-			
+
 			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			String data = formatter.format(onibus.getHoraAtualizacao());
 
 			PreparedStatement ps = conn.prepareStatement(
 					"INSERT INTO posicao (datahora, onibus, linha, velocidade, geo_ponto_rede_pto) "
-							+ "(SELECT TIMESTAMP '"+ data +"', ?, ?, ?, ST_Line_Interpolate_Point(ST_LineMerge(geo_linhas_lin), ?)::geometry FROM arco where fid = ?)",
+							+ "(SELECT TIMESTAMP '" + data
+							+ "', ?, ?, ?, ST_Line_Interpolate_Point(ST_LineMerge(geo_linhas_lin), ?)::geometry FROM arco where fid = ?)",
 					Statement.RETURN_GENERATED_KEYS);
 
 			ps.setString(1, onibus.getNome());
@@ -99,6 +103,8 @@ public class PosicaoDao {
 
 			if (rs.next()) {
 				chave = rs.getInt(1);
+			} else {
+				logger.info("Posição de em arco não inserida no banco: " + onibus);
 			}
 
 			ps.close();
@@ -107,7 +113,7 @@ public class PosicaoDao {
 		} catch (
 
 		Exception e) {
-			logger.error("Erro ao tentar inserir prosição no banco de dados.", e);
+			logger.error("Erro ao tentar inserir posição no banco de dados.", e);
 		}
 
 		return chave;
@@ -133,6 +139,8 @@ public class PosicaoDao {
 
 				onibus.setLatitude(latitude);
 				onibus.setLongitude(longitude);
+			} else {
+				logger.info("Latitude e longitude não atualizadas: " + onibus);
 			}
 
 			s.close();

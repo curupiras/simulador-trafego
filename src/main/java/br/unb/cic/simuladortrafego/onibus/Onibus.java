@@ -99,7 +99,11 @@ public class Onibus {
 
 	@Override
 	public String toString() {
-		return nome + " Elemento: " + this.elementoGrafo + " Posicao: " + this.posicaoNoElementoGrafo;
+		return "Onibus [linha=" + linha + ", elementoGrafo=" + elementoGrafo + ", posicaoNoElementoGrafo="
+				+ posicaoNoElementoGrafo + ", nome=" + nome + ", horaAtualizacao=" + horaAtualizacao + ", latitude="
+				+ latitude + ", longitude=" + longitude + ", velocidade=" + velocidade + ", tempoViagemDao="
+				+ tempoViagemDao + ", tempoAcumuladoDebug=" + tempoAcumuladoDebug + ", tempoLocalDebug="
+				+ tempoLocalDebug + "]";
 	}
 
 	public void deslocar(long tempo) {
@@ -113,7 +117,7 @@ public class Onibus {
 			// logger.info(elementoGrafo + ": " + tempoAcumuladoDebug + " s");
 
 			if (tempoPosicao.getPosicao() == 1) {
-				logger.info("Tempo de viagem em " + elementoGrafo + ": " + tempoLocalDebug + " s");
+				logger.debug("Tempo de viagem em " + elementoGrafo + ": " + tempoLocalDebug + " s");
 				TempoViagem tempoViagem = new TempoViagem(new Date(), elementoGrafo.getNome(), tempoLocalDebug);
 				tempoViagemDao.insereTempoViagem(tempoViagem);
 				tempoLocalDebug = 0;
