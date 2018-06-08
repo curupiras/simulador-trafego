@@ -1,34 +1,54 @@
 package br.unb.cic.simuladortrafego;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Scope;
+import org.springframework.scheduling.TaskScheduler;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
+import org.springframework.web.client.RestTemplate;
 
+import br.unb.cic.simuladortrafego.linha.Linha;
+import br.unb.cic.simuladortrafego.onibus.Onibus;
+
+@EnableScheduling
 @SpringBootApplication
+@Configuration
 public class App {
+	
+	@Value("${simulador.tamanhoDaFrota}")
+	private int tamanhoDaFrota;
 
 	public static void main(String[] args) {
 		SpringApplication.run(App.class, args);
 	}
-}
 
-// Graph<No, Arco> g = new DefaultDirectedGraph<>(Arco.class);
-//
-// No n1 = new No("L1", "N1", 30);
-// No n2 = new No("L1", "N2", 30);
-// No n3 = new No("L1", "N3", 30);
-//
-//// add the vertices
-// g.addVertex(n1);
-// g.addVertex(n2);
-// g.addVertex(n3);
-//
-// Arco a1 = new Arco("L1", "A1", 60, 800);
-// Arco a2 = new Arco("L1", "A2", 60, 900);
-// Arco a3 = new Arco("L1", "A3", 60, 400);
-//
-//// add edges to create linking structure
-// g.addEdge(n1, n2, a1);
-// g.addEdge(n2, n3, a2);
-// g.addEdge(n3, n1, a3);
-//
-// System.out.println(g.toString());
+	@Bean
+	public TaskScheduler taskScheduler() {
+		ThreadPoolTaskScheduler threadPoolTaskScheduler = new ThreadPoolTaskScheduler();
+		threadPoolTaskScheduler.setPoolSize(tamanhoDaFrota+1);
+		return threadPoolTaskScheduler;
+	}
+
+	@Bean
+	public RestTemplate restTemplate(RestTemplateBuilder builder) {
+		return builder.build();
+	}
+
+	@Bean
+	@Scope("prototype")
+	public SimuladorDeLinha simuladorDeLinha(Linha linha) {
+		return new SimuladorDeLinha(linha);
+	}
+
+	@Bean
+	@Scope("prototype")
+	public SimuladorDeViagem simuladorDeViagem(Onibus onibus) {
+		return new SimuladorDeViagem(onibus);
+	}
+
+}

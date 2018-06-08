@@ -4,6 +4,10 @@ import java.util.Calendar;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Scope;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 
 import br.unb.cic.parametros.Parametros;
 import br.unb.cic.simuladortrafego.grafo.Arco;
@@ -13,9 +17,45 @@ import br.unb.cic.simuladortrafego.grafo.No;
 import br.unb.cic.simuladortrafego.grafo.StatusEnum;
 import br.unb.cic.simuladortrafego.linha.Linha;
 
-public class SimuladorDeLinha implements Runnable {
+@Component
+@Scope("prototype")
+public class SimuladorDeLinha {
+
+	@Value("${simulador.probabilidadeDeOcorrenciaDeEventoGrave}")
+	private double probabilidadeDeOcorrenciaDeEventoGrave;
+	@Value("${simulador.probabilidadeDeOcorrenciaDeEventoLeve}")
+	private double probabilidadeDeOcorrenciaDeEventoLeve;
+	@Value("${simulador.probabilidadeDeOcorrenciaDeEventoModerado}")
+	private double probabilidadeDeOcorrenciaDeEventoModerado;
 	
-	private static final Logger logger = Logger.getLogger( SimuladorDeLinha.class.getName() );
+	@Value("${simulador.probabilidadeDeEncerramentoDeEventoGrave}")
+	private double probabilidadeDeEncerramentoDeEventoGrave;
+	@Value("${simulador.probabilidadeDeEncerramentoDeEventoModerado}")
+	private double probabilidadeDeEncerramentoDeEventoModerado;
+	@Value("${simulador.probabilidadeDeEncerramentoDeEventoLeve}")
+	private double probabilidadeDeEncerramentoDeEventoLeve;
+	
+	@Value("${simulador.limiteInferiorHoraDePicoMatutino}")
+	private int limiteInferiorHoraDePicoMatutino;
+	@Value("${simulador.limiteInferiorMinutoDePicoMatutino}")
+	private int limiteInferiorMinutoDePicoMatutino;
+	@Value("${simulador.limiteSuperiorHoraDePicoMatutino}")
+	private int limiteSuperiorHoraDePicoMatutino;
+	@Value("${simulador.limiteSuperiorMinutoDePicoMatutino}")
+	private int limiteSuperiorMinutoDePicoMatutino;
+	
+	@Value("${simulador.limiteInferiorHoraDePicoVespertino}")
+	private int limiteInferiorHoraDePicoVespertino;
+	@Value("${simulador.limiteInferiorMinutoDePicoVespertino}")
+	private int limiteInferiorMinutoDePicoVespertino;
+	@Value("${simulador.limiteSuperiorHoraDePicoMatutino}")
+	private int limiteSuperiorHoraDePicoVespertino;
+	@Value("${simulador.limiteSuperiorMinutoDePicoVespertino}")
+	private int limiteSuperiorMinutoDePicoVespertino;
+
+	private static final Logger logger = Logger.getLogger(SimuladorDeLinha.class.getName());
+	private static final long PERIODO_DE_ATUALIZACAO_DE_LINHA_EM_MS = 30000;
+	private static final long ATRASO_DE_ATUALIZACAO_DE_LINHA_EM_MS = 5000;
 
 	private Linha linha;
 	private ArcoDao arcoDao;
@@ -25,7 +65,8 @@ public class SimuladorDeLinha implements Runnable {
 		this.arcoDao = new ArcoDao();
 	}
 
-	public synchronized void run() {
+	@Scheduled(initialDelay = ATRASO_DE_ATUALIZACAO_DE_LINHA_EM_MS, fixedRate = PERIODO_DE_ATUALIZACAO_DE_LINHA_EM_MS)
+	public synchronized void scheduledTask() {
 		logger.debug("Início da simulação de linha.");
 		atualizaStatusDosArcos();
 		atualizaInfluenciaDeVisinhos();
@@ -78,11 +119,11 @@ public class SimuladorDeLinha implements Runnable {
 	}
 
 	private StatusEnum atualizarStatus(StatusEnum status, double evento) {
-		if (evento < Parametros.PROBABILIDADE_DE_OCORRENCIA_DE_EVENTO_GRAVE) {
+		if (evento < probabilidadeDeOcorrenciaDeEventoGrave) {
 			return StatusEnum.EVENTO_GRAVE;
-		} else if (evento < Parametros.PROBABILIDADE_DE_OCORRENCIA_DE_EVENTO_MODERADO) {
+		} else if (evento < probabilidadeDeOcorrenciaDeEventoModerado) {
 			return StatusEnum.EVENTO_MODERADO;
-		} else if (evento < Parametros.PROBABILIDADE_DE_OCORRENCIA_DE_EVENTO_LEVE) {
+		} else if (evento < probabilidadeDeOcorrenciaDeEventoLeve) {
 			return StatusEnum.EVENTO_LEVE;
 		}
 
@@ -96,15 +137,15 @@ public class SimuladorDeLinha implements Runnable {
 		}
 
 		if (status == StatusEnum.EVENTO_GRAVE) {
-			if (evento < Parametros.PROBABILIDADE_DE_ENCERRAMENTO_DE_EVENTO_GRAVE) {
+			if (evento < probabilidadeDeEncerramentoDeEventoGrave) {
 				return StatusEnum.EVENTO_MODERADO;
 			}
 		} else if (status == StatusEnum.EVENTO_MODERADO) {
-			if (evento < Parametros.PROBABILIDADE_DE_ENCERRAMENTO_DE_EVENTO_MODERADO) {
+			if (evento < probabilidadeDeEncerramentoDeEventoModerado) {
 				return StatusEnum.EVENTO_LEVE;
 			}
 		} else if (status == StatusEnum.EVENTO_LEVE) {
-			if (evento < Parametros.PROBABILIDADE_DE_ENCERRAMENTO_DE_EVENTO_LEVE) {
+			if (evento < probabilidadeDeEncerramentoDeEventoLeve) {
 				return StatusEnum.NORMAL;
 			}
 		}
@@ -144,23 +185,23 @@ public class SimuladorDeLinha implements Runnable {
 
 	private boolean isHorarioDePico() {
 		Calendar inferiorMatutino = Calendar.getInstance();
-		inferiorMatutino.set(Calendar.HOUR_OF_DAY, Parametros.LIMITE_INFERIOR_HORA_DE_PICO_MATUTINO);
-		inferiorMatutino.set(Calendar.MINUTE, Parametros.LIMITE_INFERIOR_MINUTO_DE_PICO_MATUTINO);
+		inferiorMatutino.set(Calendar.HOUR_OF_DAY, limiteInferiorHoraDePicoMatutino);
+		inferiorMatutino.set(Calendar.MINUTE, limiteInferiorMinutoDePicoMatutino);
 		inferiorMatutino.set(Calendar.SECOND, 0);
 
 		Calendar superiorMatutino = Calendar.getInstance();
-		superiorMatutino.set(Calendar.HOUR_OF_DAY, Parametros.LIMITE_SUPERIOR_HORA_DE_PICO_MATUTINO);
-		superiorMatutino.set(Calendar.MINUTE, Parametros.LIMITE_SUPERIOR_MINUTO_DE_PICO_MATUTINO);
+		superiorMatutino.set(Calendar.HOUR_OF_DAY, limiteSuperiorHoraDePicoMatutino);
+		superiorMatutino.set(Calendar.MINUTE, limiteSuperiorMinutoDePicoMatutino);
 		superiorMatutino.set(Calendar.SECOND, 0);
 
 		Calendar inferiorVespertino = Calendar.getInstance();
-		inferiorVespertino.set(Calendar.HOUR_OF_DAY, Parametros.LIMITE_INFERIOR_HORA_DE_PICO_VESPERTINO);
-		inferiorVespertino.set(Calendar.MINUTE, Parametros.LIMITE_INFERIOR_MINUTO_DE_PICO_VESPERTINO);
+		inferiorVespertino.set(Calendar.HOUR_OF_DAY, limiteInferiorHoraDePicoVespertino);
+		inferiorVespertino.set(Calendar.MINUTE, limiteInferiorMinutoDePicoVespertino);
 		inferiorVespertino.set(Calendar.SECOND, 0);
 
 		Calendar superiorVespertino = Calendar.getInstance();
-		superiorVespertino.set(Calendar.HOUR_OF_DAY, Parametros.LIMITE_SUPERIOR_HORA_DE_PICO_VESPERTINO);
-		superiorVespertino.set(Calendar.MINUTE, Parametros.LIMITE_SUPERIOR_MINUTO_DE_PICO_VESPERTINO);
+		superiorVespertino.set(Calendar.HOUR_OF_DAY, limiteSuperiorHoraDePicoVespertino);
+		superiorVespertino.set(Calendar.MINUTE, limiteSuperiorMinutoDePicoVespertino);
 		superiorVespertino.set(Calendar.SECOND, 0);
 
 		Calendar agora = Calendar.getInstance();

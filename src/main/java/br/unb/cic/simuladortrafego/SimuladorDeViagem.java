@@ -3,14 +3,21 @@ package br.unb.cic.simuladortrafego;
 import java.util.Date;
 
 import org.apache.log4j.Logger;
+import org.springframework.context.annotation.Scope;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 
 import br.unb.cic.parametros.Parametros;
 import br.unb.cic.simuladortrafego.onibus.Onibus;
 import br.unb.cic.simuladortrafego.onibus.PosicaoDao;
 
-public class SimuladorDeViagem implements Runnable {
+@Component
+@Scope("prototype")
+public class SimuladorDeViagem{
 
 	private static final Logger logger = Logger.getLogger(SimuladorDeViagem.class.getName());
+	private static final long PERIODO_DE_ATUALIZACAO_DE_VIAGEM_EM_MS = 10000;
+	private static final long ATRASO_DE_ATUALIZACAO_DE_VIAGEM_EM_MS = 0;
 
 	private PosicaoDao posicaoDao;
 	private Onibus onibus;
@@ -20,7 +27,8 @@ public class SimuladorDeViagem implements Runnable {
 		posicaoDao = new PosicaoDao();
 	}
 
-	public synchronized void run() {
+	@Scheduled(initialDelay = ATRASO_DE_ATUALIZACAO_DE_VIAGEM_EM_MS, fixedRate = PERIODO_DE_ATUALIZACAO_DE_VIAGEM_EM_MS)
+	public synchronized void scheduledTask() {
 		logger.debug("Início da simulação de Viagem.");
 		long chave = 0;
 		synchronized (onibus) {
