@@ -3,6 +3,7 @@ package br.unb.cic.simuladortrafego;
 import java.util.Date;
 
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Scope;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -14,7 +15,10 @@ import br.unb.cic.simuladortrafego.onibus.PosicaoDao;
 @Component
 @Scope("prototype")
 public class SimuladorDeViagem{
-
+	
+	@Value("${simulador.periodoDeAtualizacaoDoDeslocamentoEmSegundos}")
+	private long periodoDeAtualizacaoDoDeslocamentoEmSegundos;
+	
 	private static final Logger logger = Logger.getLogger(SimuladorDeViagem.class.getName());
 	private static final long PERIODO_DE_ATUALIZACAO_DE_VIAGEM_EM_MS = 10000;
 	private static final long ATRASO_DE_ATUALIZACAO_DE_VIAGEM_EM_MS = 0;
@@ -47,7 +51,7 @@ public class SimuladorDeViagem{
 
 	private void atualizarPosicao() {
 		onibus.setHoraAtualizacao(new Date());
-		onibus.deslocar(Parametros.PERIODO_DE_ATUALIZACAO_DO_DESLOCAMENTO_EM_SEGUNDOS);
+		onibus.deslocar(periodoDeAtualizacaoDoDeslocamentoEmSegundos);
 	}
 
 	private void atualizarVelocidade() {
