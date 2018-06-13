@@ -42,17 +42,10 @@ public class SimuladorDeViagem {
 	@Scheduled(initialDelay = ATRASO_DE_ATUALIZACAO_DE_VIAGEM_EM_MS, fixedRate = PERIODO_DE_ATUALIZACAO_DE_VIAGEM_EM_MS)
 	public synchronized void scheduledTask() {
 		logger.debug("Início da simulação de Viagem.");
-		long chave = 0;
 		synchronized (onibus) {
 			atualizarPosicao();
 			atualizarVelocidade();
-			chave = posicaoDao.inserePosicao(onibus);
-
-			if (chave == 0) {
-				logger.info("Problema ao inserrir posição.");
-			}
-
-			posicaoDao.atualizaLatitudeLongitude(chave, onibus);
+			posicaoDao.inserePosicao(onibus);
 		}
 		logger.debug("Fim da simulação de Viagem.");
 	}
