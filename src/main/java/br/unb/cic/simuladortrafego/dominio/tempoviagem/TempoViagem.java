@@ -11,7 +11,7 @@ import javax.persistence.Table;
 import org.hibernate.annotations.GenericGenerator;
 
 @Entity
-@Table(name = "tempo_viagem_preditor")
+@Table(name = "tempo_viagem_simulador")
 public class TempoViagem {
 
 	@Id

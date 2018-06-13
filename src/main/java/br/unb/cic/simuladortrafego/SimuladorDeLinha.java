@@ -4,14 +4,14 @@ import java.util.Calendar;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Scope;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import br.unb.cic.parametros.Parametros;
 import br.unb.cic.simuladortrafego.grafo.Arco;
-import br.unb.cic.simuladortrafego.grafo.ArcoDao;
+import br.unb.cic.simuladortrafego.grafo.ArcoRepository;
 import br.unb.cic.simuladortrafego.grafo.InfluenciaEnum;
 import br.unb.cic.simuladortrafego.grafo.No;
 import br.unb.cic.simuladortrafego.grafo.StatusEnum;
@@ -27,14 +27,14 @@ public class SimuladorDeLinha {
 	private double probabilidadeDeOcorrenciaDeEventoLeve;
 	@Value("${simulador.probabilidadeDeOcorrenciaDeEventoModerado}")
 	private double probabilidadeDeOcorrenciaDeEventoModerado;
-	
+
 	@Value("${simulador.probabilidadeDeEncerramentoDeEventoGrave}")
 	private double probabilidadeDeEncerramentoDeEventoGrave;
 	@Value("${simulador.probabilidadeDeEncerramentoDeEventoModerado}")
 	private double probabilidadeDeEncerramentoDeEventoModerado;
 	@Value("${simulador.probabilidadeDeEncerramentoDeEventoLeve}")
 	private double probabilidadeDeEncerramentoDeEventoLeve;
-	
+
 	@Value("${simulador.limiteInferiorHoraDePicoMatutino}")
 	private int limiteInferiorHoraDePicoMatutino;
 	@Value("${simulador.limiteInferiorMinutoDePicoMatutino}")
@@ -43,7 +43,7 @@ public class SimuladorDeLinha {
 	private int limiteSuperiorHoraDePicoMatutino;
 	@Value("${simulador.limiteSuperiorMinutoDePicoMatutino}")
 	private int limiteSuperiorMinutoDePicoMatutino;
-	
+
 	@Value("${simulador.limiteInferiorHoraDePicoVespertino}")
 	private int limiteInferiorHoraDePicoVespertino;
 	@Value("${simulador.limiteInferiorMinutoDePicoVespertino}")
@@ -53,16 +53,26 @@ public class SimuladorDeLinha {
 	@Value("${simulador.limiteSuperiorMinutoDePicoVespertino}")
 	private int limiteSuperiorMinutoDePicoVespertino;
 
+	@Value("${simulador.atrasoNaParada}")
+	private double atrasoNaParada;
+
+	@Value("${simulador.fatorDeOscilacaoDoAtraso}")
+	private double fatorDeOscilacaoDoAtraso;
+
+	@Value("${simulador.fatorDeCorrecaoHorarioDePico}")
+	private double fatorDeCorrecaoHorarioDePico;
+
 	private static final Logger logger = Logger.getLogger(SimuladorDeLinha.class.getName());
 	private static final long PERIODO_DE_ATUALIZACAO_DE_LINHA_EM_MS = 30000;
 	private static final long ATRASO_DE_ATUALIZACAO_DE_LINHA_EM_MS = 5000;
 
 	private Linha linha;
-	private ArcoDao arcoDao;
+
+	@Autowired
+	private ArcoRepository arcoRepository;
 
 	public SimuladorDeLinha(Linha linha) {
 		this.linha = linha;
-		this.arcoDao = new ArcoDao();
 	}
 
 	@Scheduled(initialDelay = ATRASO_DE_ATUALIZACAO_DE_LINHA_EM_MS, fixedRate = PERIODO_DE_ATUALIZACAO_DE_LINHA_EM_MS)
@@ -77,7 +87,7 @@ public class SimuladorDeLinha {
 	}
 
 	private void atualizaVelocidadesNoBanco() {
-		arcoDao.atualizaVelocidades(linha.getArcos());
+		arcoRepository.save(linha.getArcos());
 	}
 
 	private void atualizaStatusDosArcos() {
@@ -164,7 +174,7 @@ public class SimuladorDeLinha {
 			velocidade = velocidadeMaxima * status.fatorDeCorrecao();
 
 			if (isHorarioDePico()) {
-				velocidade = velocidade * Parametros.FATOR_DE_CORRECAO_HORARIO_DE_PICO;
+				velocidade = velocidade * fatorDeCorrecaoHorarioDePico;
 			}
 
 			velocidade = velocidade * influencia.fatorDeCorrecao();
@@ -176,8 +186,8 @@ public class SimuladorDeLinha {
 	private void atualizaAtrasosDosNos() {
 		List<No> nos = linha.getNos();
 		for (No no : nos) {
-			double atraso = Parametros.ATRASO_NA_PARADA_EM_SEGUNDOS;
-			double fatorOscilacao = Parametros.FATOR_DE_OSCILACAO_DO_ATRASO;
+			double atraso = atrasoNaParada;
+			double fatorOscilacao = fatorDeOscilacaoDoAtraso;
 			atraso = atraso * ((1 - fatorOscilacao) + fatorOscilacao * Math.random() * 2);
 			no.setAtraso(atraso);
 		}

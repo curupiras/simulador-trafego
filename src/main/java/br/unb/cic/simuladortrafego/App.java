@@ -50,5 +50,5 @@ public class App {
 	public SimuladorDeViagem simuladorDeViagem(Onibus onibus) {
 		return new SimuladorDeViagem(onibus);
 	}
-
+	
 }

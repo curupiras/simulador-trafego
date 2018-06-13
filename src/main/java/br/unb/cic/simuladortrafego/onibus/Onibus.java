@@ -2,18 +2,10 @@ package br.unb.cic.simuladortrafego.onibus;
 
 import java.util.Date;
 
-import org.apache.log4j.Logger;
-
-import br.unb.cic.simuladortrafego.dominio.tempoviagem.TempoViagem;
-import br.unb.cic.simuladortrafego.dominio.tempoviagem.TempoViagemDao;
-import br.unb.cic.simuladortrafego.grafo.DtoTempoPosicao;
 import br.unb.cic.simuladortrafego.grafo.ElementoGrafo;
 import br.unb.cic.simuladortrafego.linha.Linha;
-import br.unb.cic.simuladortrafego.util.Util;
 
 public class Onibus {
-
-	private static final Logger logger = Logger.getLogger(Onibus.class.getName());
 
 	private Linha linha;
 	private ElementoGrafo elementoGrafo;
@@ -23,8 +15,6 @@ public class Onibus {
 	private String latitude;
 	private String longitude;
 	private double velocidade;
-
-	private TempoViagemDao tempoViagemDao;
 
 	// Atributos para debug
 	private double tempoAcumuladoDebug = 0;
@@ -36,9 +26,6 @@ public class Onibus {
 		this.elementoGrafo = elementoGrafo;
 		this.posicaoNoElementoGrafo = posicao;
 		this.horaAtualizacao = new Date();
-		Util.atualizarVelocidade(this);
-
-		tempoViagemDao = new TempoViagemDao();
 	}
 
 	public Linha getLinha() {
@@ -101,36 +88,8 @@ public class Onibus {
 	public String toString() {
 		return "Onibus [linha=" + linha + ", elementoGrafo=" + elementoGrafo + ", posicaoNoElementoGrafo="
 				+ posicaoNoElementoGrafo + ", nome=" + nome + ", horaAtualizacao=" + horaAtualizacao + ", latitude="
-				+ latitude + ", longitude=" + longitude + ", velocidade=" + velocidade + ", tempoViagemDao="
-				+ tempoViagemDao + ", tempoAcumuladoDebug=" + tempoAcumuladoDebug + ", tempoLocalDebug="
-				+ tempoLocalDebug + "]";
-	}
-
-	public void deslocar(long tempo) {
-		DtoTempoPosicao tempoPosicao = new DtoTempoPosicao(tempo, this.posicaoNoElementoGrafo, this.velocidade);
-
-		while (tempoPosicao.getTempo() > 0) {
-			double tempoGasto = elementoGrafo.consomeTempo(tempoPosicao);
-
-			tempoAcumuladoDebug = tempoAcumuladoDebug + tempoGasto;
-			tempoLocalDebug = tempoLocalDebug + tempoGasto;
-			// logger.info(elementoGrafo + ": " + tempoAcumuladoDebug + " s");
-
-			if (tempoPosicao.getPosicao() == 1) {
-				logger.debug("Tempo de viagem em " + elementoGrafo + ": " + tempoLocalDebug + " s");
-				TempoViagem tempoViagem = new TempoViagem(new Date(), elementoGrafo.getNome(), tempoLocalDebug);
-				tempoViagemDao.insereTempoViagem(tempoViagem);
-				tempoLocalDebug = 0;
-
-				elementoGrafo = elementoGrafo.getProximo();
-				tempoPosicao.setPosicao(0);
-				Util.atualizarVelocidade(this);
-				tempoPosicao.setVelocidade(this.velocidade);
-			}
-		}
-
-		posicaoNoElementoGrafo = tempoPosicao.getPosicao();
-
+				+ latitude + ", longitude=" + longitude + ", velocidade=" + velocidade + ", tempoAcumuladoDebug="
+				+ tempoAcumuladoDebug + ", tempoLocalDebug=" + tempoLocalDebug + "]";
 	}
 
 	public double getVelocidade() {
@@ -139,6 +98,22 @@ public class Onibus {
 
 	public void setVelocidade(double velocidade) {
 		this.velocidade = velocidade;
+	}
+
+	public double getTempoAcumuladoDebug() {
+		return tempoAcumuladoDebug;
+	}
+
+	public void setTempoAcumuladoDebug(double tempoAcumuladoDebug) {
+		this.tempoAcumuladoDebug = tempoAcumuladoDebug;
+	}
+
+	public double getTempoLocalDebug() {
+		return tempoLocalDebug;
+	}
+
+	public void setTempoLocalDebug(double tempoLocalDebug) {
+		this.tempoLocalDebug = tempoLocalDebug;
 	}
 
 }

@@ -1,14 +1,61 @@
 package br.unb.cic.simuladortrafego.grafo;
 
-import br.unb.cic.parametros.Parametros;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.PostLoad;
+import javax.persistence.Table;
+import javax.persistence.Transient;
 
+import org.hibernate.annotations.GenericGenerator;
+
+import com.vividsolutions.jts.geom.Geometry;
+
+@Entity
+@Table(name = "no_preditor")
 public class No extends ElementoGrafo {
 
-	private String linha;
+	@Id
+	@GeneratedValue(generator = "increment")
+	@GenericGenerator(name = "increment", strategy = "increment")
+	@Column(name = "fid")
+	private int id;
+
+	@Column(name = "parada")
+	private int parada;
+
+	@Column(name = "descricao")
+	private String descricao;
+
+	@Column(name = "situacao")
+	private String situacao;
+
+	@Column(name = "estrutura_de_paragem")
+	private String estrutura;
+
+	@Column(name = "tipo")
+	private String tipo;
+
+	@Column(name = "geo_ponto_rede_pto")
+	private Geometry ponto;
+
+	@Column(name = "nome")
 	private String nome;
+
+	@Column(name = "linha")
+	private String linha;
+
+	@Transient
 	private double atraso;
+
+	@Transient
 	private int numero;
+
+	@Transient
 	private ElementoGrafo proximo;
+
+	@Transient
 	private ElementoGrafo anterior;
 
 	public No(String linha, String nome, double atraso) {
@@ -18,13 +65,14 @@ public class No extends ElementoGrafo {
 		this.atraso = atraso;
 		this.numero = Integer.parseInt(nome.substring(1));
 	}
-
-	public No(String linha, String nome) {
+	
+	public No() {
 		super();
-		this.linha = linha;
-		this.nome = nome;
-		this.numero = Integer.parseInt(nome.substring(1));
-		this.atraso = Parametros.ATRASO_NA_PARADA_EM_SEGUNDOS;
+	}
+	
+	@PostLoad
+	public void setup() {
+		this.numero = this.id;
 	}
 
 	public String getLinha() {
@@ -95,6 +143,62 @@ public class No extends ElementoGrafo {
 
 	public void setAnterior(ElementoGrafo anterior) {
 		this.anterior = anterior;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public int getParada() {
+		return parada;
+	}
+
+	public void setParada(int parada) {
+		this.parada = parada;
+	}
+
+	public String getDescricao() {
+		return descricao;
+	}
+
+	public void setDescricao(String descricao) {
+		this.descricao = descricao;
+	}
+
+	public String getSituacao() {
+		return situacao;
+	}
+
+	public void setSituacao(String situacao) {
+		this.situacao = situacao;
+	}
+
+	public String getEstrutura() {
+		return estrutura;
+	}
+
+	public void setEstrutura(String estrutura) {
+		this.estrutura = estrutura;
+	}
+
+	public String getTipo() {
+		return tipo;
+	}
+
+	public void setTipo(String tipo) {
+		this.tipo = tipo;
+	}
+
+	public Geometry getPonto() {
+		return ponto;
+	}
+
+	public void setPonto(Geometry ponto) {
+		this.ponto = ponto;
 	}
 
 	@Override

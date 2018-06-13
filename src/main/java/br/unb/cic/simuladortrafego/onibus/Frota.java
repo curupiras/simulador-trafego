@@ -17,13 +17,21 @@ import org.springframework.stereotype.Component;
 import br.unb.cic.simuladortrafego.SimuladorDeLinha;
 import br.unb.cic.simuladortrafego.SimuladorDeViagem;
 import br.unb.cic.simuladortrafego.linha.Linha;
+import br.unb.cic.simuladortrafego.linha.LinhaDao;
+import br.unb.cic.simuladortrafego.util.Util;
 
 @Component
 public class Frota {
 
 	@Autowired
 	private ApplicationContext appContext;
-	
+
+	@Autowired
+	private LinhaDao linhaDao;
+
+	@Autowired
+	private Util util;
+
 	@Value("${simulador.tamanhoDaFrota}")
 	private int tamanhoDaFrota;
 
@@ -44,10 +52,12 @@ public class Frota {
 		mapaLinhas = new HashMap<>();
 
 		Linha l1 = new Linha("CIRCULAR-W3-SUL-NORTE-L2-NORTE-SUL");
+		linhaDao.inicializaLinha(l1);
 		inserirLinha(l1);
 
 		for (int i = 0; i < tamanhoDaFrota; i++) {
 			Onibus onibus = new Onibus("O" + (i + 1), l1, l1.getArcos().get(i), 0);
+			util.atualizarVelocidade(onibus);
 			inserirOnibus(onibus);
 		}
 

@@ -1,42 +1,69 @@
 package br.unb.cic.simuladortrafego.grafo;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.PostLoad;
+import javax.persistence.Table;
+import javax.persistence.Transient;
+
+import org.hibernate.annotations.GenericGenerator;
+
+import com.vividsolutions.jts.geom.Geometry;
+
 import br.unb.cic.parametros.Parametros;
 
+@Entity
+@Table(name = "arco")
 public class Arco extends ElementoGrafo {
 
-	private String nome;
-	private String linha;
-	private double velocidadeMaxima;
-	private double velocidadeMedia;
-	private double tamanho;
-	private int numero;
-	private ElementoGrafo proximo;
-	private ElementoGrafo anterior;
-	private StatusEnum status;
-	private InfluenciaEnum influencia;
+	@Id
+	@GeneratedValue(generator = "increment")
+	@GenericGenerator(name = "increment", strategy = "increment")
+	@Column(name = "fid")
+	private long fid;
 
-	public Arco(String linha, String nome, double velocidadeMaxima, double tamanho) {
+	@Column(name = "nome")
+	private String nome;
+
+	@Column(name = "tamanho")
+	private double tamanho;
+
+	@Column(name = "geo_linhas_lin")
+	private Geometry geoLinha;
+
+	@Column(name = "linha")
+	private String linha;
+
+	@Column(name = "velocidade")
+	private double velocidadeMedia;
+
+	@Transient
+	private double velocidadeMaxima;
+
+	@Transient
+	private int numero;
+
+	@Transient
+	private ElementoGrafo proximo;
+
+	@Transient
+	private ElementoGrafo anterior;
+
+	@Transient
+	private StatusEnum status = StatusEnum.NORMAL;
+
+	@Transient
+	private InfluenciaEnum influencia = InfluenciaEnum.INFLUENCIA_AUSENTE;
+
+	public Arco() {
 		super();
-		this.nome = nome;
-		this.linha = linha;
-		this.velocidadeMaxima = velocidadeMaxima;
-		this.velocidadeMedia = velocidadeMaxima;
-		this.tamanho = tamanho;
-		this.numero = Integer.parseInt(nome.substring(1));
-		this.status = StatusEnum.NORMAL;
-		this.influencia = InfluenciaEnum.INFLUENCIA_AUSENTE;
 	}
 
-	public Arco(String linha, String nome, double tamanho) {
-		super();
-		this.linha = linha;
-		this.nome = nome;
-		this.tamanho = tamanho;
-		this.numero = Integer.parseInt(nome.substring(1));
-		this.velocidadeMaxima = Parametros.VELOCIDADE_MAXIMA_60_KM_POR_HORA;
-		this.velocidadeMedia = Parametros.VELOCIDADE_MAXIMA_60_KM_POR_HORA;
-		this.status = StatusEnum.NORMAL;
-		this.influencia = InfluenciaEnum.INFLUENCIA_AUSENTE;
+	@PostLoad
+	public void setup() {
+		this.numero = Integer.parseInt(this.nome.substring(1));
 	}
 
 	public String getLinha() {
@@ -158,6 +185,22 @@ public class Arco extends ElementoGrafo {
 
 	public Arco getArcoAnterior() {
 		return (Arco) this.getAnterior().getAnterior();
+	}
+
+	public long getFid() {
+		return fid;
+	}
+
+	public void setFid(long fid) {
+		this.fid = fid;
+	}
+
+	public Geometry getGeoLinha() {
+		return geoLinha;
+	}
+
+	public void setGeoLinha(Geometry geoLinha) {
+		this.geoLinha = geoLinha;
 	}
 
 }

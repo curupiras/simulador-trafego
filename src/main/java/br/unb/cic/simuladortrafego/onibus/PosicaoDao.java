@@ -6,15 +6,33 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
+import java.util.Collection;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.vividsolutions.jts.geom.Coordinate;
+import com.vividsolutions.jts.geom.CoordinateArrays;
+import com.vividsolutions.jts.geom.CoordinateSequence;
+import com.vividsolutions.jts.geom.Geometry;
+import com.vividsolutions.jts.geom.LineString;
+import com.vividsolutions.jts.geom.Point;
+import com.vividsolutions.jts.geom.impl.CoordinateArraySequence;
+import com.vividsolutions.jts.linearref.LinearLocation;
+import com.vividsolutions.jts.linearref.LocationIndexedLine;
+import com.vividsolutions.jts.operation.distance.DistanceOp;
+import com.vividsolutions.jts.operation.linemerge.LineMerger;
+
 import br.unb.cic.simuladortrafego.grafo.Arco;
+import br.unb.cic.simuladortrafego.grafo.No;
 
 @Component
 public class PosicaoDao {
+
+	@Autowired
+	private PosicaoRepository posicaoRepository;
 
 	private Connection conn;
 
@@ -22,9 +40,13 @@ public class PosicaoDao {
 
 	public long inserePosicao(Onibus onibus) {
 		if (onibus.getElementoGrafo() instanceof Arco) {
-			return inserePosicaoArco(onibus);
+			long chave = inserePosicaoArco(onibus);
+			inserePosicao2(onibus);
+			return chave;
 		} else {
-			return inserePosicaoNo(onibus);
+			long chave = inserePosicaoNo(onibus);
+//			inserePosicao2(onibus);
+			return chave;
 		}
 
 	}
@@ -57,7 +79,7 @@ public class PosicaoDao {
 
 			if (rs.next()) {
 				chave = rs.getInt(1);
-			}else{
+			} else {
 				logger.info("Posição em nó não inserida no banco: " + onibus);
 			}
 
@@ -70,7 +92,39 @@ public class PosicaoDao {
 			logger.error("Erro ao tentar inserir prosição no banco de dados.", e);
 		}
 
+		logger.info("Posicao No 1 fid: " + chave);
 		return chave;
+	}
+
+	private void inserePosicao2(Onibus onibus) {
+		Posicao posicao = new Posicao();
+		posicao.setDataHora(onibus.getHoraAtualizacao());
+		posicao.setOnibus(onibus.getNome());
+		posicao.setLinha(onibus.getLinha().getNome());
+		posicao.setVelocidade(onibus.getVelocidade());
+
+		if (onibus.getElementoGrafo() instanceof No) {
+			posicao.setPonto(((No) onibus.getElementoGrafo()).getPonto());
+		} 
+		else if(onibus.getElementoGrafo() instanceof Arco){
+			Geometry linha = ((Arco)onibus.getElementoGrafo()).getGeoLinha();
+			LineMerger merger = new LineMerger();
+			merger.add(linha);
+			@SuppressWarnings("rawtypes")
+			Collection mergedColl = merger.getMergedLineStrings();
+			Geometry merged = linha.getFactory().buildGeometry(mergedColl);
+			LineString lineString = (LineString)merged;
+			Coordinate pt1 = lineString.getCoordinateN(0);
+			Coordinate pt2 = lineString.getCoordinateN(lineString.getNumPoints() - 1);
+			Coordinate coordinate = LinearLocation.pointAlongSegmentByFraction(pt1, pt2, onibus.getPosicao());
+			Coordinate[] coordinates={coordinate};
+			CoordinateSequence coordinateSequence = new CoordinateArraySequence(coordinates);
+			posicao.setPonto(new Point(coordinateSequence, merged.getFactory()));
+		}
+		posicaoRepository.save(posicao);
+		logger.info("Posicao 2 fid: " + posicao.getFid());
+		
+
 	}
 
 	public long inserePosicaoArco(Onibus onibus) {
@@ -116,6 +170,7 @@ public class PosicaoDao {
 			logger.error("Erro ao tentar inserir posição no banco de dados.", e);
 		}
 
+		logger.info("Posicao Arco 1 fid: " + chave);
 		return chave;
 	}
 
