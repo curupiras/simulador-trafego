@@ -48,7 +48,7 @@ public class SimuladorDeLinha {
 	private int limiteInferiorHoraDePicoVespertino;
 	@Value("${simulador.limiteInferiorMinutoDePicoVespertino}")
 	private int limiteInferiorMinutoDePicoVespertino;
-	@Value("${simulador.limiteSuperiorHoraDePicoMatutino}")
+	@Value("${simulador.limiteSuperiorHoraDePicoVespertino}")
 	private int limiteSuperiorHoraDePicoVespertino;
 	@Value("${simulador.limiteSuperiorMinutoDePicoVespertino}")
 	private int limiteSuperiorMinutoDePicoVespertino;
@@ -61,6 +61,24 @@ public class SimuladorDeLinha {
 
 	@Value("${simulador.fatorDeCorrecaoHorarioDePico}")
 	private double fatorDeCorrecaoHorarioDePico;
+
+	@Value("${simulador.fatorDeCorrecaoNormal}")
+	private double fatorDeCorrecaoNormal;
+	@Value("${simulador.fatorDeCorrecaoLeve}")
+	private double fatorDeCorrecaoLeve;
+	@Value("${simulador.fatorDeCorrecaoModerado}")
+	private double fatorDeCorrecaoModerado;
+	@Value("${simulador.fatorDeCorrecaoGrave}")
+	private double fatorDeCorrecaoGrave;
+	
+	@Value("${simulador.fatorDeInfluenciaAusente}")
+	private double fatorDeInfluenciaAusente;
+	@Value("${simulador.fatorDeInfluenciaLeve}")
+	private double fatorDeInfluenciaLeve;
+	@Value("${simulador.fatorDeInfluenciaModerado}")
+	private double fatorDeInfluenciaModerado;
+	@Value("${simulador.fatorDeInfluenciaForte}")
+	private double fatorDeInfluenciaForte;
 
 	private static final Logger logger = Logger.getLogger(SimuladorDeLinha.class.getName());
 	private static final long PERIODO_DE_ATUALIZACAO_DE_LINHA_EM_MS = 30000;
@@ -171,13 +189,13 @@ public class SimuladorDeLinha {
 			InfluenciaEnum influencia = arco.getInfluencia();
 			double velocidade;
 
-			velocidade = velocidadeMaxima * status.fatorDeCorrecao();
+			velocidade = velocidadeMaxima * getFatorCorrecaoStatus(status);
 
 			if (isHorarioDePico()) {
 				velocidade = velocidade * fatorDeCorrecaoHorarioDePico;
 			}
 
-			velocidade = velocidade * influencia.fatorDeCorrecao();
+			velocidade = velocidade * getFatorInfluencia(influencia);
 
 			arco.setVelocidadeMedia(velocidade);
 		}
@@ -226,6 +244,38 @@ public class SimuladorDeLinha {
 
 		return false;
 
+	}
+
+	private double getFatorCorrecaoStatus(StatusEnum status) {
+		double fator = fatorDeCorrecaoNormal;
+
+		if (status == StatusEnum.NORMAL) {
+			fator = fatorDeCorrecaoNormal;
+		} else if (status == StatusEnum.EVENTO_LEVE) {
+			fator = fatorDeCorrecaoLeve;
+		} else if (status == StatusEnum.EVENTO_MODERADO) {
+			fator = fatorDeCorrecaoModerado;
+		} else if (status == StatusEnum.EVENTO_GRAVE) {
+			fator = fatorDeCorrecaoGrave;
+		}
+
+		return fator;
+	}
+	
+	private double getFatorInfluencia(InfluenciaEnum influencia) {
+		double fator = fatorDeInfluenciaAusente;
+		
+		if (influencia == InfluenciaEnum.INFLUENCIA_AUSENTE) {
+			fator = fatorDeInfluenciaAusente;
+		} else if (influencia == InfluenciaEnum.INFLUENCIA_LEVE) {
+			fator = fatorDeInfluenciaLeve;
+		} else if (influencia == InfluenciaEnum.INFLUENCIA_MODERADA) {
+			fator = fatorDeInfluenciaModerado;
+		} else if (influencia == InfluenciaEnum.INFLUENCIA_FORTE) {
+			fator = fatorDeInfluenciaForte;
+		}
+		
+		return fator;
 	}
 
 }

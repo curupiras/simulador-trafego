@@ -1,29 +1,20 @@
 package br.unb.cic.simuladortrafego.grafo;
 
-import br.unb.cic.parametros.Parametros;
-
 public enum InfluenciaEnum {
 
-	INFLUENCIA_FORTE("Influência Forte", Parametros.FATOR_DE_INFLUENCIA_FORTE),
-	INFLUENCIA_MODERADA("Influência Moderada", Parametros.FATOR_DE_INFLUENCIA_MODERADO),
-	INFLUENCIA_LEVE("Influência Leve", Parametros.FATOR_DE_INFLUENCIA_LEVE),
-	INFLUENCIA_AUSENTE("Influência Ausente", Parametros.FATOR_DE_INFLUENCIA_AUSENTE);
-	
+	INFLUENCIA_FORTE("Influência Forte"),
+	INFLUENCIA_MODERADA("Influência Moderada"),
+	INFLUENCIA_LEVE("Influência Leve"),
+	INFLUENCIA_AUSENTE("Influência Ausente");
 
 	private String nome;
-	private double fatorDeCorrecao;
 
-	InfluenciaEnum(String nome, double fator) {
+	InfluenciaEnum(String nome) {
 		this.nome = nome;
-		this.fatorDeCorrecao = fator;
 	}
 
 	public String nome() {
 		return this.nome;
-	}
-
-	public double fatorDeCorrecao() {
-		return this.fatorDeCorrecao;
 	}
 
 }
