@@ -2,6 +2,7 @@ package br.unb.cic.simuladortrafego;
 
 import java.util.Calendar;
 import java.util.List;
+import java.util.Random;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,6 +59,8 @@ public class SimuladorDeLinha {
 
 	@Value("${simulador.fatorDeOscilacaoDoAtraso}")
 	private double fatorDeOscilacaoDoAtraso;
+	@Value("${simulador.fatorDeOscilacaoDoAtrasoDesvioPadrao}")
+	private double fatorDeOscilacaoDoAtrasoDesvioPadrao;
 
 	@Value("${simulador.fatorDeCorrecaoHorarioDePico}")
 	private double fatorDeCorrecaoHorarioDePico;
@@ -70,6 +73,8 @@ public class SimuladorDeLinha {
 	private double fatorDeCorrecaoModerado;
 	@Value("${simulador.fatorDeCorrecaoGrave}")
 	private double fatorDeCorrecaoGrave;
+	@Value("${simulador.fatorDeCorrecaoDesvioPadrao}")
+	private double fatorDeCorrecaoDesvioPadrao;
 	
 	@Value("${simulador.fatorDeInfluenciaAusente}")
 	private double fatorDeInfluenciaAusente;
@@ -79,6 +84,8 @@ public class SimuladorDeLinha {
 	private double fatorDeInfluenciaModerado;
 	@Value("${simulador.fatorDeInfluenciaForte}")
 	private double fatorDeInfluenciaForte;
+	@Value("${simulador.fatorDeInfluenciaDesvioPadrao}")
+	private double fatorDeInfluenciaDesvioPadrao;
 
 	private static final Logger logger = Logger.getLogger(SimuladorDeLinha.class.getName());
 	private static final long PERIODO_DE_ATUALIZACAO_DE_LINHA_EM_MS = 30000;
@@ -205,7 +212,7 @@ public class SimuladorDeLinha {
 		List<No> nos = linha.getNos();
 		for (No no : nos) {
 			double atraso = atrasoNaParada;
-			double fatorOscilacao = fatorDeOscilacaoDoAtraso;
+			double fatorOscilacao = getFatorOscilacaoAtraso();
 			atraso = atraso * ((1 - fatorOscilacao) + fatorOscilacao * Math.random() * 2);
 			no.setAtraso(atraso);
 		}
@@ -259,7 +266,8 @@ public class SimuladorDeLinha {
 			fator = fatorDeCorrecaoGrave;
 		}
 
-		return fator;
+		Random random = new Random();
+		return random.nextGaussian()*fatorDeCorrecaoDesvioPadrao+fator;
 	}
 	
 	private double getFatorInfluencia(InfluenciaEnum influencia) {
@@ -275,7 +283,13 @@ public class SimuladorDeLinha {
 			fator = fatorDeInfluenciaForte;
 		}
 		
-		return fator;
+		Random random = new Random();
+		return random.nextGaussian()*fatorDeInfluenciaDesvioPadrao+fator;
+	}
+	
+	private double getFatorOscilacaoAtraso(){
+		Random random = new Random();
+		return random.nextGaussian()*fatorDeOscilacaoDoAtrasoDesvioPadrao+fatorDeOscilacaoDoAtraso;
 	}
 
 }
