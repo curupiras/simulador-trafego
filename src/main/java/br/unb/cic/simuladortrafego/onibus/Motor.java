@@ -35,7 +35,7 @@ public class Motor {
 				logger.debug(
 						"Tempo de viagem em " + onibus.getElementoGrafo() + ": " + onibus.getTempoLocalDebug() + " s");
 				TempoViagem tempoViagem = new TempoViagem(new Date(), onibus.getElementoGrafo().getNome(),
-						onibus.getTempoLocalDebug());
+						onibus.getTempoLocalDebug(), onibus.getNome());
 				tempoViagemRepository.save(tempoViagem);
 				onibus.setTempoLocalDebug(0);
 

@@ -19,11 +19,12 @@ public class TempoViagem {
 	@GenericGenerator(name = "increment", strategy = "increment")
 	private long id;
 
-	public TempoViagem(Date dataHora, String nome, double tempo) {
+	public TempoViagem(Date dataHora, String nome, double tempo, String onibus) {
 		super();
 		this.dataHora = dataHora;
 		this.nome = nome;
 		this.tempo = tempo;
+		this.onibus = onibus;
 	}
 
 	@Column(name = "datahora")
@@ -34,6 +35,9 @@ public class TempoViagem {
 
 	@Column(name = "tempo")
 	private double tempo;
+
+	@Column(name = "onibus")
+	private String onibus;
 
 	public long getId() {
 		return id;
@@ -65,6 +69,14 @@ public class TempoViagem {
 
 	public void setTempo(double tempo) {
 		this.tempo = tempo;
+	}
+
+	public String getOnibus() {
+		return onibus;
+	}
+
+	public void setOnibus(String onibus) {
+		this.onibus = onibus;
 	}
 
 }
