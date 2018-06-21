@@ -75,7 +75,7 @@ public class SimuladorDeLinha {
 	private double fatorDeCorrecaoGrave;
 	@Value("${simulador.fatorDeCorrecaoDesvioPadrao}")
 	private double fatorDeCorrecaoDesvioPadrao;
-	
+
 	@Value("${simulador.fatorDeInfluenciaAusente}")
 	private double fatorDeInfluenciaAusente;
 	@Value("${simulador.fatorDeInfluenciaLeve}")
@@ -219,6 +219,13 @@ public class SimuladorDeLinha {
 	}
 
 	private boolean isHorarioDePico() {
+
+		Calendar agora = Calendar.getInstance();
+
+		if (isFimDeSemana(agora)) {
+			return false;
+		}
+
 		Calendar inferiorMatutino = Calendar.getInstance();
 		inferiorMatutino.set(Calendar.HOUR_OF_DAY, limiteInferiorHoraDePicoMatutino);
 		inferiorMatutino.set(Calendar.MINUTE, limiteInferiorMinutoDePicoMatutino);
@@ -238,8 +245,6 @@ public class SimuladorDeLinha {
 		superiorVespertino.set(Calendar.HOUR_OF_DAY, limiteSuperiorHoraDePicoVespertino);
 		superiorVespertino.set(Calendar.MINUTE, limiteSuperiorMinutoDePicoVespertino);
 		superiorVespertino.set(Calendar.SECOND, 0);
-
-		Calendar agora = Calendar.getInstance();
 
 		if (agora.compareTo(inferiorMatutino) > 0 && agora.compareTo(superiorMatutino) < 0) {
 			return true;
@@ -267,12 +272,12 @@ public class SimuladorDeLinha {
 		}
 
 		Random random = new Random();
-		return random.nextGaussian()*fatorDeCorrecaoDesvioPadrao+fator;
+		return random.nextGaussian() * fatorDeCorrecaoDesvioPadrao + fator;
 	}
-	
+
 	private double getFatorInfluencia(InfluenciaEnum influencia) {
 		double fator = fatorDeInfluenciaAusente;
-		
+
 		if (influencia == InfluenciaEnum.INFLUENCIA_AUSENTE) {
 			fator = fatorDeInfluenciaAusente;
 		} else if (influencia == InfluenciaEnum.INFLUENCIA_LEVE) {
@@ -282,14 +287,23 @@ public class SimuladorDeLinha {
 		} else if (influencia == InfluenciaEnum.INFLUENCIA_FORTE) {
 			fator = fatorDeInfluenciaForte;
 		}
-		
+
 		Random random = new Random();
-		return random.nextGaussian()*fatorDeInfluenciaDesvioPadrao+fator;
+		return random.nextGaussian() * fatorDeInfluenciaDesvioPadrao + fator;
 	}
-	
-	private double getFatorOscilacaoAtraso(){
+
+	private double getFatorOscilacaoAtraso() {
 		Random random = new Random();
-		return random.nextGaussian()*fatorDeOscilacaoDoAtrasoDesvioPadrao+fatorDeOscilacaoDoAtraso;
+		return random.nextGaussian() * fatorDeOscilacaoDoAtrasoDesvioPadrao + fatorDeOscilacaoDoAtraso;
+	}
+
+	private boolean isFimDeSemana(Calendar calendar) {
+		int diaDaSemana = calendar.get(Calendar.DAY_OF_WEEK);
+		if (diaDaSemana == Calendar.SATURDAY || diaDaSemana == Calendar.SUNDAY) {
+			return true;
+		}
+		return false;
+
 	}
 
 }
