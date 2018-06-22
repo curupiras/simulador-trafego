@@ -64,6 +64,8 @@ public class SimuladorDeLinha {
 
 	@Value("${simulador.fatorDeCorrecaoHorarioDePico}")
 	private double fatorDeCorrecaoHorarioDePico;
+	@Value("${simulador.fatorDeCorrecaoHorarioDePicoDesvioPadrao}")
+	private double fatorDeCorrecaoHorarioDePicoDesvioPadrao;
 
 	@Value("${simulador.fatorDeCorrecaoNormal}")
 	private double fatorDeCorrecaoNormal;
@@ -199,7 +201,7 @@ public class SimuladorDeLinha {
 			velocidade = velocidadeMaxima * getFatorCorrecaoStatus(status);
 
 			if (isHorarioDePico()) {
-				velocidade = velocidade * fatorDeCorrecaoHorarioDePico;
+				velocidade = velocidade * getFatorCorrecaoHorarioDePico();
 			}
 
 			velocidade = velocidade * getFatorInfluencia(influencia);
@@ -208,12 +210,80 @@ public class SimuladorDeLinha {
 		}
 	}
 
+	private double getFatorCorrecaoHorarioDePico() {
+
+		double corretorLinearDaMedia;
+
+		Calendar agora = Calendar.getInstance();
+
+		Calendar inferiorMatutino = Calendar.getInstance();
+		inferiorMatutino.set(Calendar.HOUR_OF_DAY, limiteInferiorHoraDePicoMatutino);
+		inferiorMatutino.set(Calendar.MINUTE, limiteInferiorMinutoDePicoMatutino);
+		inferiorMatutino.set(Calendar.SECOND, 0);
+
+		Calendar superiorMatutino = Calendar.getInstance();
+		superiorMatutino.set(Calendar.HOUR_OF_DAY, limiteSuperiorHoraDePicoMatutino);
+		superiorMatutino.set(Calendar.MINUTE, limiteSuperiorMinutoDePicoMatutino);
+		superiorMatutino.set(Calendar.SECOND, 0);
+
+		Calendar inferiorVespertino = Calendar.getInstance();
+		inferiorVespertino.set(Calendar.HOUR_OF_DAY, limiteInferiorHoraDePicoVespertino);
+		inferiorVespertino.set(Calendar.MINUTE, limiteInferiorMinutoDePicoVespertino);
+		inferiorVespertino.set(Calendar.SECOND, 0);
+
+		Calendar superiorVespertino = Calendar.getInstance();
+		superiorVespertino.set(Calendar.HOUR_OF_DAY, limiteSuperiorHoraDePicoVespertino);
+		superiorVespertino.set(Calendar.MINUTE, limiteSuperiorMinutoDePicoVespertino);
+		superiorVespertino.set(Calendar.SECOND, 0);
+
+		double horaAtual = agora.get(Calendar.HOUR_OF_DAY);
+		double minutoAtual = agora.get(Calendar.MINUTE);
+		double minutosAgora = horaAtual * 60 + minutoAtual;
+		double a = 0;
+		double b = 0;
+
+		if (agora.compareTo(inferiorMatutino) > 0 && agora.compareTo(superiorMatutino) < 0) {
+			double minutosInferiorMatutino = limiteInferiorHoraDePicoMatutino * 60 + limiteInferiorMinutoDePicoMatutino;
+			double minutosSuperiorMatutino = limiteSuperiorHoraDePicoMatutino * 60 + limiteSuperiorMinutoDePicoMatutino;
+			double minutosCentralMatutino = (minutosSuperiorMatutino + minutosInferiorMatutino) / 2;
+
+			if (minutosAgora < minutosCentralMatutino) {
+				b = (fatorDeCorrecaoHorarioDePico * minutosInferiorMatutino - minutosCentralMatutino)
+						/ (minutosInferiorMatutino - minutosCentralMatutino);
+				a = (1 - b) / minutosInferiorMatutino;
+			} else {
+				b = (fatorDeCorrecaoHorarioDePico * minutosSuperiorMatutino - minutosCentralMatutino)
+						/ (minutosSuperiorMatutino - minutosCentralMatutino);
+				a = (1 - b) / minutosSuperiorMatutino;
+			}
+		} else if (agora.compareTo(inferiorVespertino) > 0 && agora.compareTo(superiorVespertino) < 0) {
+			double minutosInferiorVespertino = limiteInferiorHoraDePicoVespertino * 60
+					+ limiteInferiorMinutoDePicoVespertino;
+			double minutosSuperiorVespertino = limiteSuperiorHoraDePicoVespertino * 60
+					+ limiteSuperiorMinutoDePicoVespertino;
+			double minutosCentralVespertino = (minutosSuperiorVespertino + minutosInferiorVespertino) / 2;
+
+			if (minutosAgora < minutosCentralVespertino) {
+				b = (fatorDeCorrecaoHorarioDePico * minutosInferiorVespertino - minutosCentralVespertino)
+						/ (minutosInferiorVespertino - minutosCentralVespertino);
+				a = (1 - b) / minutosInferiorVespertino;
+			} else {
+				b = (fatorDeCorrecaoHorarioDePico * minutosSuperiorVespertino - minutosCentralVespertino)
+						/ (minutosSuperiorVespertino - minutosCentralVespertino);
+				a = (1 - b) / minutosSuperiorVespertino;
+			}
+		}
+
+		corretorLinearDaMedia = a * minutosAgora + b;
+		Random random = new Random();
+		return random.nextGaussian() * fatorDeCorrecaoHorarioDePicoDesvioPadrao + corretorLinearDaMedia;
+	}
+
 	private void atualizaAtrasosDosNos() {
 		List<No> nos = linha.getNos();
 		for (No no : nos) {
 			double atraso = atrasoNaParada;
-			double fatorOscilacao = getFatorOscilacaoAtraso();
-			atraso = atraso * ((1 - fatorOscilacao) + fatorOscilacao * Math.random() * 2);
+			atraso = atraso * getFatorOscilacaoAtraso();
 			no.setAtraso(atraso);
 		}
 	}
