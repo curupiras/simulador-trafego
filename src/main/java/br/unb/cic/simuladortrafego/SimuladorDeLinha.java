@@ -89,20 +89,24 @@ public class SimuladorDeLinha {
 	@Value("${simulador.fatorDeInfluenciaDesvioPadrao}")
 	private double fatorDeInfluenciaDesvioPadrao;
 
+	@Value("${simulador.periodoDeAtualizacaoDeLinhaEmMilisegundos}")
+	private double periodoDeAtualizacaoDeLinhaEmMilisegundos;
+
 	private static final Logger logger = Logger.getLogger(SimuladorDeLinha.class.getName());
-	private static final long PERIODO_DE_ATUALIZACAO_DE_LINHA_EM_MS = 30000;
-	private static final long ATRASO_DE_ATUALIZACAO_DE_LINHA_EM_MS = 5000;
 
 	private Linha linha;
 
 	@Autowired
 	private ArcoRepository arcoRepository;
 
+	@Autowired
+	private ControladorDoTempo controladorDoTempo;
+
 	public SimuladorDeLinha(Linha linha) {
 		this.linha = linha;
 	}
 
-	@Scheduled(initialDelay = ATRASO_DE_ATUALIZACAO_DE_LINHA_EM_MS, fixedRate = PERIODO_DE_ATUALIZACAO_DE_LINHA_EM_MS)
+	@Scheduled(initialDelayString = "#{${simulador.periodoDeAtualizacaoDeLinhaEmMilisegundos}/${simulador.multiplicadorDoTempo}/6}", fixedRateString = "#{${simulador.periodoDeAtualizacaoDeLinhaEmMilisegundos}/${simulador.multiplicadorDoTempo}}")
 	public synchronized void scheduledTask() {
 		logger.debug("Início da simulação de linha.");
 		atualizaStatusDosArcos();
@@ -214,24 +218,28 @@ public class SimuladorDeLinha {
 
 		double corretorLinearDaMedia;
 
-		Calendar agora = Calendar.getInstance();
+		Calendar agora = controladorDoTempo.getCalendar();
 
 		Calendar inferiorMatutino = Calendar.getInstance();
+		inferiorMatutino.setTime(agora.getTime());
 		inferiorMatutino.set(Calendar.HOUR_OF_DAY, limiteInferiorHoraDePicoMatutino);
 		inferiorMatutino.set(Calendar.MINUTE, limiteInferiorMinutoDePicoMatutino);
 		inferiorMatutino.set(Calendar.SECOND, 0);
 
 		Calendar superiorMatutino = Calendar.getInstance();
+		superiorMatutino.setTime(agora.getTime());
 		superiorMatutino.set(Calendar.HOUR_OF_DAY, limiteSuperiorHoraDePicoMatutino);
 		superiorMatutino.set(Calendar.MINUTE, limiteSuperiorMinutoDePicoMatutino);
 		superiorMatutino.set(Calendar.SECOND, 0);
 
 		Calendar inferiorVespertino = Calendar.getInstance();
+		inferiorVespertino.setTime(agora.getTime());
 		inferiorVespertino.set(Calendar.HOUR_OF_DAY, limiteInferiorHoraDePicoVespertino);
 		inferiorVespertino.set(Calendar.MINUTE, limiteInferiorMinutoDePicoVespertino);
 		inferiorVespertino.set(Calendar.SECOND, 0);
 
 		Calendar superiorVespertino = Calendar.getInstance();
+		superiorVespertino.setTime(agora.getTime());
 		superiorVespertino.set(Calendar.HOUR_OF_DAY, limiteSuperiorHoraDePicoVespertino);
 		superiorVespertino.set(Calendar.MINUTE, limiteSuperiorMinutoDePicoVespertino);
 		superiorVespertino.set(Calendar.SECOND, 0);
@@ -290,28 +298,32 @@ public class SimuladorDeLinha {
 
 	private boolean isHorarioDePico() {
 
-		Calendar agora = Calendar.getInstance();
+		Calendar agora = controladorDoTempo.getCalendar();
 
 		if (isFimDeSemana(agora)) {
 			return false;
 		}
 
 		Calendar inferiorMatutino = Calendar.getInstance();
+		inferiorMatutino.setTime(agora.getTime());
 		inferiorMatutino.set(Calendar.HOUR_OF_DAY, limiteInferiorHoraDePicoMatutino);
 		inferiorMatutino.set(Calendar.MINUTE, limiteInferiorMinutoDePicoMatutino);
 		inferiorMatutino.set(Calendar.SECOND, 0);
 
 		Calendar superiorMatutino = Calendar.getInstance();
+		superiorMatutino.setTime(agora.getTime());
 		superiorMatutino.set(Calendar.HOUR_OF_DAY, limiteSuperiorHoraDePicoMatutino);
 		superiorMatutino.set(Calendar.MINUTE, limiteSuperiorMinutoDePicoMatutino);
 		superiorMatutino.set(Calendar.SECOND, 0);
 
 		Calendar inferiorVespertino = Calendar.getInstance();
+		inferiorVespertino.setTime(agora.getTime());
 		inferiorVespertino.set(Calendar.HOUR_OF_DAY, limiteInferiorHoraDePicoVespertino);
 		inferiorVespertino.set(Calendar.MINUTE, limiteInferiorMinutoDePicoVespertino);
 		inferiorVespertino.set(Calendar.SECOND, 0);
 
 		Calendar superiorVespertino = Calendar.getInstance();
+		superiorVespertino.setTime(agora.getTime());
 		superiorVespertino.set(Calendar.HOUR_OF_DAY, limiteSuperiorHoraDePicoVespertino);
 		superiorVespertino.set(Calendar.MINUTE, limiteSuperiorMinutoDePicoVespertino);
 		superiorVespertino.set(Calendar.SECOND, 0);

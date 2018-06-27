@@ -20,12 +20,12 @@ public class Onibus {
 	private double tempoAcumuladoDebug = 0;
 	private double tempoLocalDebug = 0;
 
-	public Onibus(String nome, Linha linha, ElementoGrafo elementoGrafo, double posicao) {
+	public Onibus(String nome, Linha linha, ElementoGrafo elementoGrafo, double posicao, Date horaAtualizacao) {
 		this.nome = nome;
 		this.linha = linha;
 		this.elementoGrafo = elementoGrafo;
 		this.posicaoNoElementoGrafo = posicao;
-		this.horaAtualizacao = new Date();
+		this.horaAtualizacao = horaAtualizacao;
 	}
 
 	public Linha getLinha() {

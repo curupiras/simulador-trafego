@@ -1,11 +1,10 @@
 package br.unb.cic.simuladortrafego.onibus;
 
-import java.util.Date;
-
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import br.unb.cic.simuladortrafego.ControladorDoTempo;
 import br.unb.cic.simuladortrafego.dominio.tempoviagem.TempoViagem;
 import br.unb.cic.simuladortrafego.dominio.tempoviagem.TempoViagemRepository;
 import br.unb.cic.simuladortrafego.grafo.DtoTempoPosicao;
@@ -19,6 +18,9 @@ public class Motor {
 
 	@Autowired
 	private Util util;
+	
+	@Autowired
+	ControladorDoTempo controladorDoTempo;
 
 	private static final Logger logger = Logger.getLogger(Motor.class.getName());
 
@@ -34,7 +36,7 @@ public class Motor {
 			if (tempoPosicao.getPosicao() == 1) {
 				logger.debug(
 						"Tempo de viagem em " + onibus.getElementoGrafo() + ": " + onibus.getTempoLocalDebug() + " s");
-				TempoViagem tempoViagem = new TempoViagem(new Date(), onibus.getElementoGrafo().getNome(),
+				TempoViagem tempoViagem = new TempoViagem(controladorDoTempo.getDate(), onibus.getElementoGrafo().getNome(),
 						onibus.getTempoLocalDebug(), onibus.getNome());
 				tempoViagemRepository.save(tempoViagem);
 				onibus.setTempoLocalDebug(0);

@@ -18,7 +18,7 @@ import br.unb.cic.simuladortrafego.util.Util;
 @Scope("prototype")
 public class SimuladorDeViagem {
 
-	@Value("${simulador.periodoDeAtualizacaoDoDeslocamentoEmSegundos}")
+	@Value("#{${simulador.periodoDeAtualizacaoDoDeslocamentoEmMilisegundos} / 1000}")
 	private long periodoDeAtualizacaoDoDeslocamentoEmSegundos;
 	
 	@Autowired
@@ -29,10 +29,11 @@ public class SimuladorDeViagem {
 	
 	@Autowired
 	private Util util;
+	
+	@Autowired
+	ControladorDoTempo controladorDoTempo;
 
 	private static final Logger logger = Logger.getLogger(SimuladorDeViagem.class.getName());
-	private static final long PERIODO_DE_ATUALIZACAO_DE_VIAGEM_EM_MS = 10000;
-	private static final long ATRASO_DE_ATUALIZACAO_DE_VIAGEM_EM_MS = 0;
 
 	private Onibus onibus;
 
@@ -40,7 +41,7 @@ public class SimuladorDeViagem {
 		this.onibus = onibus;
 	}
 
-	@Scheduled(initialDelay = ATRASO_DE_ATUALIZACAO_DE_VIAGEM_EM_MS, fixedRate = PERIODO_DE_ATUALIZACAO_DE_VIAGEM_EM_MS)
+	@Scheduled(fixedRateString = "#{${simulador.periodoDeAtualizacaoDoDeslocamentoEmMilisegundos} / ${simulador.multiplicadorDoTempo}}")
 	public synchronized void scheduledTask() {
 		logger.debug("Início da simulação de Viagem.");
 		synchronized (onibus) {
@@ -52,7 +53,7 @@ public class SimuladorDeViagem {
 	}
 
 	private void atualizarPosicao() {
-		onibus.setHoraAtualizacao(new Date());
+		onibus.setHoraAtualizacao(controladorDoTempo.getDate());
 		motor.deslocar(onibus, periodoDeAtualizacaoDoDeslocamentoEmSegundos);
 	}
 

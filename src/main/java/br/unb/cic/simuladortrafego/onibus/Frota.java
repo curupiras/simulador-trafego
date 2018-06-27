@@ -14,6 +14,7 @@ import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
+import br.unb.cic.simuladortrafego.ControladorDoTempo;
 import br.unb.cic.simuladortrafego.SimuladorDeLinha;
 import br.unb.cic.simuladortrafego.SimuladorDeViagem;
 import br.unb.cic.simuladortrafego.linha.Linha;
@@ -31,6 +32,9 @@ public class Frota {
 
 	@Autowired
 	private Util util;
+	
+	@Autowired
+	ControladorDoTempo controladorDoTempo;
 
 	@Value("${simulador.tamanhoDaFrota}")
 	private int tamanhoDaFrota;
@@ -56,7 +60,7 @@ public class Frota {
 		inserirLinha(l1);
 
 		for (int i = 0; i < tamanhoDaFrota; i++) {
-			Onibus onibus = new Onibus("O" + (i + 1), l1, l1.getArcos().get(i), 0);
+			Onibus onibus = new Onibus("O" + (i + 1), l1, l1.getArcos().get(i), 0, controladorDoTempo.getDate());
 			util.atualizarVelocidade(onibus);
 			inserirOnibus(onibus);
 		}
