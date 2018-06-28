@@ -28,9 +28,9 @@ public class ControladorDoTempo {
 		sdf = new SimpleDateFormat("yyyy MMM dd HH:mm:ss");
 	}
 	
-	@Scheduled(fixedRateString  = "#{${simulador.periodoDeAtualizacaoDoDeslocamentoEmMilisegundos} / ${simulador.multiplicadorDoTempo}}")
+	@Scheduled(fixedRateString  = "#{1000 / ${simulador.multiplicadorDoTempo}}")
 	public synchronized void scheduledTask() {
-		calendar.add(Calendar.MILLISECOND, periodoDeAtualizacaoDoDeslocamentoEmMilisegundos);
+		calendar.add(Calendar.MILLISECOND, 1000);
 		logger.debug(sdf.format(calendar.getTime()));
 	}
 

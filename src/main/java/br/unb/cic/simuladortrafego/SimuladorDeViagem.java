@@ -18,16 +18,16 @@ public class SimuladorDeViagem {
 
 	@Value("#{${simulador.periodoDeAtualizacaoDoDeslocamentoEmMilisegundos} / 1000}")
 	private long periodoDeAtualizacaoDoDeslocamentoEmSegundos;
-	
+
 	@Autowired
 	private Motor motor;
-	
+
 	@Autowired
 	private PosicaoDao posicaoDao;
-	
+
 	@Autowired
 	private Util util;
-	
+
 	@Autowired
 	ControladorDoTempo controladorDoTempo;
 
