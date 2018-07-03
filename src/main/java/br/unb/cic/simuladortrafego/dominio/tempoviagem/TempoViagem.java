@@ -25,6 +25,7 @@ public class TempoViagem {
 		this.nome = nome;
 		this.tempo = tempo;
 		this.onibus = onibus;
+		this.processado = false;
 	}
 
 	@Column(name = "datahora")
@@ -38,6 +39,9 @@ public class TempoViagem {
 
 	@Column(name = "onibus")
 	private String onibus;
+	
+	@Column(name = "processado")
+	private boolean processado;
 
 	public long getId() {
 		return id;
@@ -77,6 +81,14 @@ public class TempoViagem {
 
 	public void setOnibus(String onibus) {
 		this.onibus = onibus;
+	}
+
+	public boolean isProcessado() {
+		return processado;
+	}
+
+	public void setProcessado(boolean processado) {
+		this.processado = processado;
 	}
 
 }

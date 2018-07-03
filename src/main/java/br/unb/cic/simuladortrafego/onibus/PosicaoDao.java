@@ -30,6 +30,7 @@ public class PosicaoDao {
 		posicao.setOnibus(onibus.getNome());
 		posicao.setLinha(onibus.getLinha().getNome());
 		posicao.setVelocidade(onibus.getVelocidade());
+		posicao.setProcessado(false);
 
 		if (onibus.getElementoGrafo() instanceof No) {
 			posicao.setPonto(((No) onibus.getElementoGrafo()).getPonto());

@@ -19,30 +19,33 @@ public class Posicao {
 	@Id
 	@GeneratedValue(generator = "increment")
 	@GenericGenerator(name = "increment", strategy = "increment")
-	@Column(name = "fid")
-	private long fid;
+	@Column(name = "id")
+	private long id;
 
 	@Column(name = "datahora")
 	private Date dataHora;
 
-	@Column(name = "onibus")
+	@Column(name = "ordem")
 	private String onibus;
 
 	@Column(name = "linha")
 	private String linha;
 
-	@Column(name = "geo_ponto_rede_pto")
+	@Column(name = "geo_pto")
 	private Geometry ponto;
 
 	@Column(name = "velocidade")
 	private double velocidade;
 
+	@Column(name = "processado")
+	private boolean processado;
+
 	public long getFid() {
-		return fid;
+		return id;
 	}
 
 	public void setFid(long fid) {
-		this.fid = fid;
+		this.id = fid;
 	}
 
 	public Date getDataHora() {
@@ -83,6 +86,14 @@ public class Posicao {
 
 	public void setVelocidade(double velocidade) {
 		this.velocidade = velocidade;
+	}
+
+	public boolean isProcessado() {
+		return processado;
+	}
+
+	public void setProcessado(boolean processado) {
+		this.processado = processado;
 	}
 
 }
