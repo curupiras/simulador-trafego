@@ -4,6 +4,8 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Random;
 
+import javax.annotation.PostConstruct;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -101,6 +103,24 @@ public class SimuladorDeLinha {
 
 	@Autowired
 	private ControladorDoTempo controladorDoTempo;
+
+	@PostConstruct
+	public void informaParametros() {
+		logger.info("probabilidadeDeOcorrenciaDeEventoGrave: " + probabilidadeDeOcorrenciaDeEventoGrave);
+		logger.info("probabilidadeDeOcorrenciaDeEventoModerado: " + probabilidadeDeOcorrenciaDeEventoModerado);
+		logger.info("probabilidadeDeOcorrenciaDeEventoLeve: " + probabilidadeDeOcorrenciaDeEventoLeve);
+
+		logger.info("fatorDeCorrecaoGrave: " + fatorDeCorrecaoGrave);
+		logger.info("fatorDeCorrecaoModerado: " + fatorDeCorrecaoModerado);
+		logger.info("fatorDeCorrecaoLeve: " + fatorDeCorrecaoLeve);
+		logger.info("fatorDeCorrecaoHorarioDePico: " + fatorDeCorrecaoHorarioDePico);
+		
+		logger.info("fatorDeInfluenciaForte: " + fatorDeInfluenciaForte);
+		logger.info("fatorDeInfluenciaModerado: " + fatorDeInfluenciaModerado);
+		logger.info("fatorDeInfluenciaLeve: " + fatorDeInfluenciaLeve);
+		
+		logger.info("fatorDeOscilacaoDoAtrasoDesvioPadrao: " + fatorDeOscilacaoDoAtrasoDesvioPadrao);
+	}
 
 	public SimuladorDeLinha(Linha linha) {
 		this.linha = linha;
